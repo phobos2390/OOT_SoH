@@ -14,6 +14,8 @@ endif()
 set (BUILD_UTILS OFF CACHE STRING "no utilities")
 set (BUILD_SHARED_LIBS OFF CACHE STRING "install/link shared instead of static libs")
 
+set (BUILD_REMOTE_CONTROL true)
+
 ################################################################################
 # Set target arch type if empty. Visual studio solution generator provides it.
 ################################################################################
