@@ -1,8 +1,14 @@
 #include "global.h"
 #include "vt.h"
 #include <string.h>
+#include <SDL2/SDL_mouse.h>
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_log.h>
 
 #include "soh/Enhancements/game-interactor/GameInteractor.h"
+
+s16 mouse_cur_x;
+s16 mouse_cur_y;
 
 s32 D_8012D280 = 1;
 
@@ -206,6 +212,29 @@ void PadMgr_RumbleSet(PadMgr* padMgr, u8* ctrlrRumbles) {
     padMgr->rumbleOnFrames = 240;
 }
 
+void check_mouse_state (void* context, SDL_Event* event) {
+    if(event->type == SDL_MOUSEMOTION) {
+        mouse_cur_x = event->motion.xrel;
+        mouse_cur_y = event->motion.yrel;
+
+        SDL_Log("Mouse motion event: %d,%d", mouse_cur_x, mouse_cur_y);
+        // if (event->motion.state & 0x2 == 0x2) {
+        //     SDL_SetRelativeMouseMode(SDL_TRUE);
+        // }
+        // else {
+        //     SDL_SetRelativeMouseMode(SDL_FALSE);
+        // }
+    }
+    if(event->type == SDL_KEYDOWN) {
+        if (event->key.keysym.scancode == SDL_SCANCODE_EQUALS) {
+            SDL_SetRelativeMouseMode(SDL_TRUE);
+        }
+        if (event->key.keysym.scancode == SDL_SCANCODE_MINUS) {
+            SDL_SetRelativeMouseMode(SDL_FALSE);
+        }
+    }
+}
+
 #define PAUSE_BUFFER_INPUT_BLOCK_ID 0
 void PadMgr_ProcessInputs(PadMgr* padMgr) {
     s32 i;
@@ -369,6 +398,8 @@ void PadMgr_RequestPadData(PadMgr* padMgr, Input* inputs, s32 mode) {
     Input* newInput;
     s32 buttonDiff;
 
+    SDL_GetRelativeMouseState(&mouse_cur_x, &mouse_cur_y);
+
     PadMgr_LockPadData(padMgr);
 
     ogInput = &padMgr->inputs[0];
@@ -451,6 +482,11 @@ void PadMgr_Init(PadMgr* padMgr, OSMesgQueue* siIntMsgQ, IrqMgr* irqMgr, OSId id
 
     memset(padMgr, 0, sizeof(PadMgr));
     padMgr->irqMgr = irqMgr;
+
+    mouse_cur_x  = 0;
+    mouse_cur_y  = 0;
+
+    SDL_AddEventWatch (&check_mouse_state, padMgr);
 
     osCreateMesgQueue(&padMgr->interruptMsgQ, padMgr->interruptMsgBuf, 4);
     // OTRTODO: Removed due to crash

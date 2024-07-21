@@ -36,6 +36,14 @@ s32 Camera_UpdateWater(Camera* camera);
 
 #include "z_camera_data.inc"
 
+
+#define MOUSE_CAM_X_SENSITIVITY 50.0f
+#define MOUSE_CAM_Y_SENSITIVITY 50.0f
+
+extern s16 mouse_cur_x;
+extern s16 mouse_cur_y;
+
+
 /*===============================================================*/
 
 /**
@@ -1419,8 +1427,8 @@ s32 Camera_Noop(Camera* camera) {
 }
 
 s32 SetCameraManual(Camera* camera) {
-    f32 newCamX = -D_8015BD7C->state.input[0].cur.right_stick_x * 10.0f;
-    f32 newCamY = D_8015BD7C->state.input[0].cur.right_stick_y * 10.0f;
+    f32 newCamX = -D_8015BD7C->state.input[0].cur.right_stick_x * 10.0f - mouse_cur_x * MOUSE_CAM_X_SENSITIVITY;
+    f32 newCamY = D_8015BD7C->state.input[0].cur.right_stick_y * 10.0f + mouse_cur_y * MOUSE_CAM_Y_SENSITIVITY;
 
     if ((fabsf(newCamX) >= 15.0f || fabsf(newCamY) >= 15.0f) && camera->play->manualCamera == false) {
         camera->play->manualCamera = true;
@@ -1485,8 +1493,8 @@ s32 Camera_Free(Camera* camera) {
 
     camera->animState = 0;
 
-    f32 newCamX = -D_8015BD7C->state.input[0].cur.right_stick_x * 10.0f * (CVarGetFloat("gThirdPersonCameraSensitivityX", 1.0f));
-    f32 newCamY = D_8015BD7C->state.input[0].cur.right_stick_y * 10.0f * (CVarGetFloat("gThirdPersonCameraSensitivityY", 1.0f));
+    f32 newCamX = -D_8015BD7C->state.input[0].cur.right_stick_x * 10.0f * (CVarGetFloat("gThirdPersonCameraSensitivityX", 1.0f)) - (mouse_cur_y) * MOUSE_CAM_Y_SENSITIVITY;
+    f32 newCamY = D_8015BD7C->state.input[0].cur.right_stick_y * 10.0f * (CVarGetFloat("gThirdPersonCameraSensitivityY", 1.0f)) + (mouse_cur_x) * MOUSE_CAM_X_SENSITIVITY;
     bool invertXAxis = (CVarGetInteger("gInvertXAxis", 0) && !CVarGetInteger("gMirroredWorld", 0)) || (!CVarGetInteger("gInvertXAxis", 0) && CVarGetInteger("gMirroredWorld", 0));
 
     camera->play->camX += newCamX * (invertXAxis ? -1 : 1);
