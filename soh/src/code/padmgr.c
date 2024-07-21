@@ -7,8 +7,8 @@
 
 #include "soh/Enhancements/game-interactor/GameInteractor.h"
 
-u16 mouse_cur_x;
-u16 mouse_cur_y;
+s16 mouse_cur_x;
+s16 mouse_cur_y;
 
 s32 D_8012D280 = 1;
 

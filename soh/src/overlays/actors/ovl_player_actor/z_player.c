@@ -42,8 +42,8 @@
 #define MOUSE_CAM_X_SENSITIVITY 50.0f
 #define MOUSE_CAM_Y_SENSITIVITY 50.0f
 
-extern u16 mouse_cur_x;
-extern u16 mouse_cur_y;
+extern s16 mouse_cur_x;
+extern s16 mouse_cur_y;
 
 typedef enum {
     /* 0x00 */ KNOB_ANIM_ADULT_L,
@@ -12061,7 +12061,7 @@ s16 func_8084ABD8(PlayState* play, Player* this, s32 arg2, s16 arg3) {
             temp3 += (-sControlInput->cur.gyro_x) * 750.0f;
         }
         if (fabsf(mouse_cur_y) > 0.01f) {
-            temp3 += fabsf(mouse_cur_y) * MOUSE_CAM_X_SENSITIVITY;
+            temp3 += (mouse_cur_y) * MOUSE_CAM_X_SENSITIVITY;
         }
         
         this->actor.focus.rot.x += temp3;

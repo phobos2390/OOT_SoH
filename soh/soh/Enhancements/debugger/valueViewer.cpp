@@ -33,6 +33,8 @@ std::vector<ValueTableElement> valueTable = {
     { "Link Focus Pitch",   "Player->actor.focus.rot.x",            "FOCX:",   TYPE_S16,   true,  []() -> void* { return &GET_PLAYER(gPlayState)->actor.focus.rot.x; }, WHITE },
     { "Link Shape Yaw",     "Player->actor.shape.rot.y",            "SHPY:",   TYPE_S16,   true,  []() -> void* { return &GET_PLAYER(gPlayState)->actor.shape.rot.y; }, WHITE },
     { "Link Shape Pitch",   "Player->actor.shape.rot.x",            "SHPX:",   TYPE_S16,   true,  []() -> void* { return &GET_PLAYER(gPlayState)->actor.shape.rot.x; }, WHITE },
+    { "Main Cam X",         "gPlayState.camX",                      "FCMX:",   TYPE_FLOAT, true,  []() -> void* { return &gPlayState->camX; }, WHITE },
+    { "Main Cam Y",         "gPlayState.camY",                      "FCMY:",   TYPE_FLOAT, true,  []() -> void* { return &gPlayState->camY; }, WHITE },
     { "Link Velocity",      "Player->linearVelocity",               "V:",      TYPE_FLOAT, true,  []() -> void* { return &GET_PLAYER(gPlayState)->linearVelocity; },    WHITE },
     { "Link X Velocity",    "Player->actor.velocity.x",             "XV:",     TYPE_FLOAT, true,  []() -> void* { return &GET_PLAYER(gPlayState)->actor.velocity.x; },  WHITE },
     { "Link Y Velocity",    "Player->actor.velocity.y",             "YV:",     TYPE_FLOAT, true,  []() -> void* { return &GET_PLAYER(gPlayState)->actor.velocity.y; },  WHITE },
