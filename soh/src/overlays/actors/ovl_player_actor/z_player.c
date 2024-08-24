@@ -39,6 +39,12 @@
 // This is called "adjusted" for now.
 #define PLAYER_ANIM_ADJUSTED_SPEED (2.0f / 3.0f)
 
+#define MOUSE_CAM_X_SENSITIVITY 50.0f
+#define MOUSE_CAM_Y_SENSITIVITY 50.0f
+
+extern u16 mouse_cur_x;
+extern u16 mouse_cur_y;
+
 typedef enum {
     /* 0x00 */ KNOB_ANIM_ADULT_L,
     /* 0x01 */ KNOB_ANIM_CHILD_L,
@@ -12009,11 +12015,18 @@ s16 func_8084ABD8(PlayState* play, Player* this, s32 arg2, s16 arg3) {
         if (fabsf(sControlInput->cur.gyro_x) > 0.01f) {
             temp2 += (-sControlInput->cur.gyro_x) * 750.0f;
         }
-        if (CVarGetInteger(CVAR_SETTING("DisableFirstPersonAutoCenterView"), 0)) {
-            this->actor.focus.rot.x += temp2 * 0.1f;
+        if (fabsf(mouse_cur_y) > 0.01f) {
+            this->actor.focus.rot.x += (mouse_cur_y) * MOUSE_CAM_Y_SENSITIVITY;
             this->actor.focus.rot.x = CLAMP(this->actor.focus.rot.x, -14000, 14000);
-        } else {
-            Math_SmoothStepToS(&this->actor.focus.rot.x, temp2, 14, 4000, 30);
+        }
+        else
+        {
+            if (CVarGetInteger(CVAR_SETTING("DisableFirstPersonAutoCenterView"), 0)) {
+                this->actor.focus.rot.x += temp2 * 0.1f;
+                this->actor.focus.rot.x = CLAMP(this->actor.focus.rot.x, -14000, 14000);
+            } else {
+                Math_SmoothStepToS(&this->actor.focus.rot.x, temp2, 14, 4000, 30);
+            }
         }
 
         // X Axis
@@ -12027,10 +12040,13 @@ s16 func_8084ABD8(PlayState* play, Player* this, s32 arg2, s16 arg3) {
         if (fabsf(sControlInput->cur.gyro_y) > 0.01f) {
             temp2 += (sControlInput->cur.gyro_y) * 750.0f * invertXAxisMulti;
         }
+        if (fabsf(mouse_cur_x) > 0.01f) {
+            temp2 -= (mouse_cur_x) * MOUSE_CAM_X_SENSITIVITY;
+        }
         temp2 = CLAMP(temp2, -3000, 3000);
         this->actor.focus.rot.y += temp2;
     } else { // First person with weapon
-        // Y Axis
+        // y axis
         temp1 = (this->stateFlags1 & PLAYER_STATE1_ON_HORSE) ? 3500 : 14000;
         
         if (!CVarGetInteger(CVAR_SETTING("MoveInFirstPerson"), 0)) {
@@ -12044,6 +12060,10 @@ s16 func_8084ABD8(PlayState* play, Player* this, s32 arg2, s16 arg3) {
         if (fabsf(sControlInput->cur.gyro_x) > 0.01f) {
             temp3 += (-sControlInput->cur.gyro_x) * 750.0f;
         }
+        if (fabsf(mouse_cur_y) > 0.01f) {
+            temp3 += fabsf(mouse_cur_y) * MOUSE_CAM_X_SENSITIVITY;
+        }
+        
         this->actor.focus.rot.x += temp3;
         this->actor.focus.rot.x = CLAMP(this->actor.focus.rot.x, -temp1, temp1);
 
@@ -12061,6 +12081,9 @@ s16 func_8084ABD8(PlayState* play, Player* this, s32 arg2, s16 arg3) {
         }
         if (fabsf(sControlInput->cur.gyro_y) > 0.01f) {
             temp3 += (sControlInput->cur.gyro_y) * 750.0f * invertXAxisMulti;
+        }
+        if (fabsf(mouse_cur_x) > 0.01f) {
+            temp3 -= (mouse_cur_x) * MOUSE_CAM_X_SENSITIVITY;
         }
         temp2 += temp3;
         this->actor.focus.rot.y = CLAMP(temp2, -temp1, temp1) + this->actor.shape.rot.y;
