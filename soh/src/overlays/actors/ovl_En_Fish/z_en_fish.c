@@ -7,6 +7,7 @@
 #include "z_en_fish.h"
 #include "objects/gameplay_keep/gameplay_keep.h"
 #include "vt.h"
+#include "soh/ResourceManagerHelpers.h"
 
 #define FLAGS 0
 
@@ -622,7 +623,7 @@ void EnFish_Cutscene_WiggleFlyingThroughAir(EnFish* this, PlayState* play) {
 void EnFish_UpdateCutscene(EnFish* this, PlayState* play) {
     s32 pad;
     s32 pad2;
-    CsCmdActorAction* csAction = play->csCtx.npcActions[1];
+    CsCmdActorCue* csAction = play->csCtx.npcActions[1];
     Vec3f startPos;
     Vec3f endPos;
     f32 progress;
@@ -714,7 +715,7 @@ void EnFish_OrdinaryUpdate(EnFish* this, PlayState* play) {
             EnFish_BeginRespawn(this);
         } else if (EnFish_InBottleRange(this, play)) {
             // GI_MAX in this case allows the player to catch the actor in a bottle
-            func_8002F434(&this->actor, play, GI_MAX, 80.0f, 20.0f);
+            Actor_OfferGetItem(&this->actor, play, GI_MAX, 80.0f, 20.0f);
         }
     }
 }

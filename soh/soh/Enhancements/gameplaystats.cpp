@@ -1,11 +1,10 @@
-extern "C" {
 #include "gameplaystats.h"
-}
 #include "gameplaystatswindow.h"
 
 #include "soh/SaveManager.h"
 #include "functions.h"
 #include "macros.h"
+#include "soh/cvar_prefixes.h"
 #include "../UIWidgets.hpp"
 #include "soh/util.h"
 
@@ -625,12 +624,6 @@ void DrawGameplayStatsOptionsTab() {
 }
 
 void GameplayStatsWindow::DrawElement() {
-    ImGui::SetNextWindowSize(ImVec2(480, 550), ImGuiCond_FirstUseEver);
-    if (!ImGui::Begin("Gameplay Stats", &mIsVisible, ImGuiWindowFlags_NoFocusOnAppearing)) {
-        ImGui::End();
-        return;
-    }
-
     DrawGameplayStatsHeader();
 
     if (ImGui::BeginTabBar("Stats", ImGuiTabBarFlags_NoCloseWithMiddleMouseButton)) {
@@ -654,8 +647,6 @@ void GameplayStatsWindow::DrawElement() {
     }
    
     ImGui::Text("Note: Gameplay stats are saved to the current file and will be\nlost if you quit without saving.");
-
-    ImGui::End();
 }
 void InitStats(bool isDebug) {
     gSaveContext.sohStats.heartPieces = isDebug ? 8 : 0;

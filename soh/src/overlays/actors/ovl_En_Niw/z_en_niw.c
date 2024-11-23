@@ -9,6 +9,7 @@
 #include "overlays/actors/ovl_En_Attack_Niw/z_en_attack_niw.h"
 #include "vt.h"
 #include "soh/frame_interpolation.h"
+#include "soh/ResourceManagerHelpers.h"
 
 #define FLAGS (ACTOR_FLAG_UPDATE_WHILE_CULLED | ACTOR_FLAG_ALWAYS_THROWN)
 
@@ -467,7 +468,7 @@ void func_80AB6450(EnNiw* this, PlayState* play) {
         this->actionFunc = func_80AB6BF8;
     } else {
         // GI_NONE in this case allows the player to lift the actor
-        func_8002F434(&this->actor, play, GI_NONE, 25.0f, 10.0f);
+        Actor_OfferGetItem(&this->actor, play, GI_NONE, 25.0f, 10.0f);
         func_80AB5BF8(this, play, 1);
     }
 }

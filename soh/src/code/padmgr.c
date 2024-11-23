@@ -6,6 +6,8 @@
 #include <SDL2/SDL_log.h>
 
 #include "soh/Enhancements/game-interactor/GameInteractor.h"
+#include "soh/OTRGlobals.h"
+#include "soh/ResourceManagerHelpers.h"
 
 s16 mouse_cur_x;
 s16 mouse_cur_y;

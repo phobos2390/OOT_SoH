@@ -7,6 +7,7 @@
 #include "z_en_ishi.h"
 #include "overlays/effects/ovl_Effect_Ss_Kakera/z_eff_ss_kakera.h"
 #include "objects/gameplay_field_keep/gameplay_field_keep.h"
+#include "soh/OTRGlobals.h"
 
 #include "vt.h"
 
@@ -379,9 +380,9 @@ void EnIshi_Wait(EnIshi* this, PlayState* play) {
             if (this->actor.xzDistToPlayer < 90.0f) {
                 // GI_NONE in these cases allows the player to lift the actor
                 if (type == ROCK_LARGE) {
-                    func_8002F434(&this->actor, play, GI_NONE, 80.0f, 20.0f);
+                    Actor_OfferGetItem(&this->actor, play, GI_NONE, 80.0f, 20.0f);
                 } else {
-                    func_8002F434(&this->actor, play, GI_NONE, 50.0f, 10.0f);
+                    Actor_OfferGetItem(&this->actor, play, GI_NONE, 50.0f, 10.0f);
                 }
             }
         }
