@@ -57,6 +57,13 @@ void ResourceMgr_UnpatchGfxByName(const char* path, const char* patchName);
 u8 Randomizer_GetSettingValue(RandomizerSettingKey randoSettingKey);
 }
 
+#define AUTHOR "LL"
+#define CVAR(v) "gHoliday." AUTHOR "." v
+static ImVec4 customColorZero = RAINBOW_PRESETS[0][0];
+static ImVec4 customColorOne = RAINBOW_PRESETS[0][1];
+static ImVec4 customColorMinusZero = RAINBOW_PRESETS[0][2];
+static ImVec4 customColorMinusOne = RAINBOW_PRESETS[0][3];
+
 #define PATCH_GFX(path, name, cvar, index, instruction)             \
     if (CVarGetInteger(cvar, 0)) {                                  \
         ResourceMgr_PatchGfxByName(path, name, index, instruction); \
@@ -461,6 +468,28 @@ static const char* MarginCvarNonAnchor[]{
     CVAR_COSMETIC("HUD.TitleCard.Map"), CVAR_COSMETIC("HUD.TitleCard.Boss"),
 };
 
+ImVec4 Color_LUSToImGui(Color_RGBA8 color) {
+    ImVec4 result;
+
+    result.x = color.r / 255.0f;
+    result.y = color.g / 255.0f;
+    result.z = color.b / 255.0f;
+    result.w = color.a / 255.0f;
+
+    return result;
+}
+
+Color_RGBA8 Color_ImGuiToLUS(ImVec4 color) {
+    Color_RGBA8 result;
+
+    result.r = static_cast<uint8_t>(color.x * 255);
+    result.g = static_cast<uint8_t>(color.y * 255);
+    result.b = static_cast<uint8_t>(color.z * 255);
+    result.a = static_cast<uint8_t>(color.w * 255);
+
+    return result;
+}
+
 void SetMarginAll(const char* ButtonName, bool SetActivated, const char* tooltip) {
     if (UIWidgets::Button(ButtonName,
                           UIWidgets::ButtonOptions().Size(ImVec2(200.0f, 0.0f)).Color(THEME_COLOR).Tooltip(tooltip))) {
@@ -514,6 +543,8 @@ void ResetPositionAll() {
 
 int hue = 0;
 
+#define CVAR_LL(v) "gHoliday." "LL" "." v
+
 // Runs every frame to update rainbow hue, a potential future optimization is to only run this a once or twice a second
 // and increase the speed of the rainbow hue rotation.
 void CosmeticsUpdateTick() {
@@ -523,10 +554,44 @@ void CosmeticsUpdateTick() {
         if (cosmeticOption.supportsRainbow && CVarGetInteger(cosmeticOption.rainbowCvar, 0)) {
             double frequency = 2 * M_PI / (360 * rainbowSpeed);
             Color_RGBA8 newColor;
-            newColor.r = static_cast<uint8_t>(sin(frequency * (hue + index) + 0) * 127) + 128;
-            newColor.g = static_cast<uint8_t>(sin(frequency * (hue + index) + (2 * M_PI / 3)) * 127) + 128;
-            newColor.b = static_cast<uint8_t>(sin(frequency * (hue + index) + (4 * M_PI / 3)) * 127) + 128;
+
             newColor.a = 255;
+            
+            if (!CVarGetInteger(CVAR_LL("lEnableCustomRainbows"), 0)) {
+                newColor.r = static_cast<uint8_t>(sin(frequency * (hue + index) + 0) * 127) + 128;
+                newColor.g = static_cast<uint8_t>(sin(frequency * (hue + index) + (2 * M_PI / 3)) * 127) + 128;
+                newColor.b = static_cast<uint8_t>(sin(frequency * (hue + index) + (4 * M_PI / 3)) * 127) + 128;
+            }
+            else {
+                Color_RGBA8 customColorZero = CVarGetColor(CVAR_LL("lCustomRainbow1"), {});
+                Color_RGBA8 customColorOne = CVarGetColor(CVAR_LL("lCustomRainbow2"), {});
+                Color_RGBA8 customColorMinusZero = CVarGetColor(CVAR_LL("lCustomRainbow3"), {});
+                Color_RGBA8 customColorMinusOne = CVarGetColor(CVAR_LL("lCustomRainbow4"), {});
+                float sinangle = sin(frequency * (hue + index));
+                bool quadrant1 = hue <= (360 * rainbowSpeed) / 4;
+                bool quadrant2 = hue >= (360 * rainbowSpeed) / 4 && hue <= (360 * rainbowSpeed) / 2;
+                bool quadrant3 = hue >= (360 * rainbowSpeed) / 2 && hue <= (360 * rainbowSpeed) * 3 / 4;
+                bool quadrant4 = hue >= (360 * rainbowSpeed) * 3 / 4;
+
+                if (quadrant1) { //zero to one
+                    newColor.r = sinangle * (customColorOne.r - customColorZero.r) + customColorZero.r;
+                    newColor.g = sinangle * (customColorOne.g - customColorZero.g) + customColorZero.g;
+                    newColor.b = sinangle * (customColorOne.b - customColorZero.b) + customColorZero.b;
+                } else if (quadrant2) { //one to zero
+                    newColor.r = sinangle * (customColorOne.r - customColorMinusZero.r) + customColorMinusZero.r;
+                    newColor.g = sinangle * (customColorOne.g - customColorMinusZero.g) + customColorMinusZero.g;
+                    newColor.b = sinangle * (customColorOne.b - customColorMinusZero.b) + customColorMinusZero.b;
+                } else if (quadrant3) { //zero to minus one
+                    newColor.r = -sinangle * (customColorMinusOne.r - customColorMinusZero.r) + customColorMinusZero.r;
+                    newColor.g = -sinangle * (customColorMinusOne.g - customColorMinusZero.g) + customColorMinusZero.g;
+                    newColor.b = -sinangle * (customColorMinusOne.b - customColorMinusZero.b) + customColorMinusZero.b;
+                } else if (quadrant4) { //minus one to zero
+                    newColor.r = -sinangle * (customColorMinusOne.r - customColorZero.r) + customColorZero.r;
+                    newColor.g = -sinangle * (customColorMinusOne.g - customColorZero.g) + customColorZero.g;
+                    newColor.b = -sinangle * (customColorMinusOne.b - customColorZero.b) + customColorZero.b;
+                }
+            }
+            
             // For alpha supported options, retain the last set alpha instead of overwriting
             if (cosmeticOption.supportsAlpha) {
                 newColor.a = static_cast<uint8_t>(cosmeticOption.currentColor.w * 255.0f);
@@ -2408,6 +2473,66 @@ void CosmeticsEditorWindow::DrawElement() {
             }
         }
     }
+
+    if (ImGui::BeginMenu("Customize Rainbows")) {
+        UIWidgets::CVarCheckbox("Enable", CVAR("lEnableCustomRainbows"), UIWidgets::CheckboxOptions()
+                                .Color(THEME_COLOR)
+        if (CVarGetInteger(CVAR("lEnableCustomRainbows"), 0)) {
+            ImGui::ColorEdit3("Color 1", (float*)&customColorZero,      ImGuiColorEditFlags_NoInputs);
+            ImGui::ColorEdit3("Color 2", (float*)&customColorOne,       ImGuiColorEditFlags_NoInputs);
+            ImGui::ColorEdit3("Color 3", (float*)&customColorMinusZero, ImGuiColorEditFlags_NoInputs);
+            ImGui::ColorEdit3("Color 4", (float*)&customColorMinusOne,  ImGuiColorEditFlags_NoInputs);
+
+            size_t rainbowPresetIdx = 0;
+            if (UIWidgets::CVarCombobox("Preset", CVAR("lCustomRainbowPreset"), RAINBOW_PRESET_NAMES,
+                        UIWidgets::ComboboxOptions()
+                        .DefaultIndex(0)
+                        .Color(THEME_COLOR)) &&
+                    (rainbowPresetIdx = CVarGetInteger(CVAR("lCustomRainbowPreset"), 0)) <= RAINBOW_PRESET_LEN) { //paranoia
+                customColorZero = RAINBOW_PRESETS[rainbowPresetIdx][0];
+                customColorOne = RAINBOW_PRESETS[rainbowPresetIdx][1];
+                customColorMinusZero = RAINBOW_PRESETS[rainbowPresetIdx][2];
+                customColorMinusOne = RAINBOW_PRESETS[rainbowPresetIdx][3];
+            }
+
+            Color_RGBA8 color1, color2, color3, color4;
+            color1.r = static_cast<uint8_t>(customColorZero.x * 255.0f);
+            color1.g = static_cast<uint8_t>(customColorZero.y * 255.0f);
+            color1.b = static_cast<uint8_t>(customColorZero.z * 255.0f);
+
+            color2.r = static_cast<uint8_t>(customColorOne.x * 255.0f);
+            color2.g = static_cast<uint8_t>(customColorOne.y * 255.0f);
+            color2.b = static_cast<uint8_t>(customColorOne.z * 255.0f);
+
+            color3.r = static_cast<uint8_t>(customColorMinusZero.x * 255.0f);
+            color3.g = static_cast<uint8_t>(customColorMinusZero.y * 255.0f);
+            color3.b = static_cast<uint8_t>(customColorMinusZero.z * 255.0f);
+
+            color4.r = static_cast<uint8_t>(customColorMinusOne.x * 255.0f);
+            color4.g = static_cast<uint8_t>(customColorMinusOne.y * 255.0f);
+            color4.b = static_cast<uint8_t>(customColorMinusOne.z * 255.0f);
+
+            CVarSetColor(CVAR("lCustomRainbow1"), color1);
+            CVarSetColor(CVAR("lCustomRainbow2"), color2);
+            CVarSetColor(CVAR("lCustomRainbow3"), color3);
+            CVarSetColor(CVAR("lCustomRainbow4"), color4);
+
+            Color_RGBA8 c1 = CVarGetColor(CVAR("lCustomRainbow1"), Color_ImGuiToLUS(RAINBOW_PRESETS[0][0]));
+            Color_RGBA8 c2 = CVarGetColor(CVAR("lCustomRainbow2"), Color_ImGuiToLUS(RAINBOW_PRESETS[0][1]));
+            Color_RGBA8 c3 = CVarGetColor(CVAR("lCustomRainbow3"), Color_ImGuiToLUS(RAINBOW_PRESETS[0][2]));
+            Color_RGBA8 c4 = CVarGetColor(CVAR("lCustomRainbow4"), Color_ImGuiToLUS(RAINBOW_PRESETS[0][3]));
+
+            customColorZero = Color_LUSToImGui((Color_RGBA8)c1);
+            customColorOne = Color_LUSToImGui((Color_RGBA8)c2);
+            customColorMinusZero = Color_LUSToImGui((Color_RGBA8)c3);
+            customColorMinusOne = Color_LUSToImGui((Color_RGBA8)c4);
+
+        }
+
+        ImGui::EndMenu();
+
+    }
+
     if (UIWidgets::Button("Randomize All", UIWidgets::ButtonOptions().Size(ImVec2(250.0f, 0.0f)).Color(THEME_COLOR))) {
         CosmeticsEditor_RandomizeAll();
     }
