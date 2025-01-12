@@ -124,7 +124,7 @@ void Context::PlaceItemInLocation(const RandomizerCheck locKey, const Randomizer
                  StaticData::GetLocation(locKey)->GetName() + "\n");
 
     if (applyEffectImmediately || mOptions[RSK_LOGIC_RULES].Is(RO_LOGIC_GLITCHLESS) ||
-        mOptions[RSK_LOGIC_RULES].Is(RO_LOGIC_VANILLA)) {
+        mOptions[RSK_LOGIC_RULES].Is(RO_LOGIC_NEARLY_NO_LOGIC) || mOptions[RSK_LOGIC_RULES].Is(RO_LOGIC_VANILLA)) {
         StaticData::RetrieveItem(item).ApplyEffect();
     }
 
