@@ -9,8 +9,8 @@ void RegionTable_Init_IceCavern() {
     // Vanilla/MQ Decider
     areaTable[RR_ICE_CAVERN_ENTRYWAY] = Region("Ice Cavern Entryway", "Ice Cavern", {RA_ICE_CAVERN}, NO_DAY_NIGHT_CYCLE, {}, {}, {
         //Exits
-        Entrance(RR_ICE_CAVERN_BEGINNING,    []{return ctx->GetDungeon(ICE_CAVERN)->IsVanilla();}),
-        Entrance(RR_ICE_CAVERN_MQ_BEGINNING, []{return ctx->GetDungeon(ICE_CAVERN)->IsMQ() && logic->CanUseProjectile();}),
+        Entrance(RR_ICE_CAVERN_BEGINNING,    []{return ctx->GetDungeon(ICE_CAVERN)->IsVanilla();}, true),
+        Entrance(RR_ICE_CAVERN_MQ_BEGINNING, []{return ctx->GetDungeon(ICE_CAVERN)->IsMQ() && (logic->IsNNL() || logic->CanUseProjectile());}, true),
         Entrance(RR_ZORAS_FOUNTAIN,          []{return true;}),
     });
 
@@ -18,7 +18,7 @@ void RegionTable_Init_IceCavern() {
 
     areaTable[RR_ICE_CAVERN_BEGINNING] = Region("Ice Cavern Beginning", "Ice Cavern", {RA_ICE_CAVERN}, NO_DAY_NIGHT_CYCLE, {}, {
         //Locations
-        LOCATION(RC_ICE_CAVERN_ENTRANCE_STORMS_FAIRY, logic->CanUse(RG_SONG_OF_STORMS)),
+        LOCATION_NNL(RC_ICE_CAVERN_ENTRANCE_STORMS_FAIRY, logic->CanUse(RG_SONG_OF_STORMS)),
     }, {
         //Exits
         Entrance(RR_ICE_CAVERN_ENTRYWAY, []{return true;}),
@@ -93,7 +93,7 @@ void RegionTable_Init_IceCavern() {
     areaTable[RR_ICE_CAVERN_MQ_MAP_ROOM] = Region("Ice Cavern MQ Map Room", "Ice Cavern", {RA_ICE_CAVERN}, NO_DAY_NIGHT_CYCLE, {
         //Events
         //Child can fit between the stalagmites on the left hand side
-        EventAccess(&logic->BlueFireAccess,  []{return logic->IsChild || logic->CanJumpslash() || logic->HasExplosives();}),
+        EventAccess(&logic->BlueFireAccess,  []{return logic->BlueFireAccess || logic->IsChild || logic->CanJumpslash() || logic->HasExplosives();}),
     }, {
         //Locations
         LOCATION(RC_ICE_CAVERN_MQ_MAP_CHEST, logic->BlueFire() && Here(RR_ICE_CAVERN_MQ_MAP_ROOM, []{return logic->CanHitSwitch();})),

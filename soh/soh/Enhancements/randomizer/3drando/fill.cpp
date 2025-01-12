@@ -303,13 +303,12 @@ bool IsBeatableWithout(RandomizerCheck excludedCheck, bool replaceItem, Randomiz
   auto ctx = Rando::Context::GetInstance();
   RandomizerGet copy = ctx->GetItemLocation(excludedCheck)->GetPlacedRandomizerGet(); //Copy out item
   ctx->GetItemLocation(excludedCheck)->SetPlacedItem(RG_NONE); //Write in empty item
-  ctx->playthroughBeatable = false;
   logic->Reset();
-  CheckBeatable(ignore);
+  bool result = CheckBeatable(ignore);
   if (replaceItem){
     ctx->GetItemLocation(excludedCheck)->SetPlacedItem(copy); //Immediately put item back
   }
-  return ctx->playthroughBeatable;
+  return result;
 }
 
 // Reset non-Logic-class logic, and optionally apply the initial inventory
@@ -541,6 +540,7 @@ void GeneratePlaythrough() {
 // return if the seed is currently beatable or not
 bool CheckBeatable(RandomizerGet ignore /* = RG_NONE*/) {
   auto ctx = Rando::Context::GetInstance();
+  ctx->playthroughBeatable = false;
   GetAccessibleLocationsStruct gals(0);
   ResetLogic(ctx, gals, true);
   do {
@@ -806,7 +806,7 @@ static void AssumedFill(const std::vector<RandomizerGet>& items, const std::vect
         return;
     }
 
-    if (ctx->GetOption(RSK_LOGIC_RULES).Is(RO_LOGIC_NO_LOGIC)) {
+    if (ctx->GetOption(RSK_LOGIC_RULES).Is(RO_LOGIC_NO_LOGIC) || (logic->IsNNL() && !ctx->GetOption(RSK_ALL_LOCATIONS_REACHABLE))) {
         FastFill(items, GetEmptyLocations(allowedLocations), true);
         return;
     }
@@ -822,6 +822,7 @@ static void AssumedFill(const std::vector<RandomizerGet>& items, const std::vect
             return;
         }
         unsuccessfulPlacement = false;
+
         std::vector<RandomizerGet> itemsToPlace = items;
 
         // copy all not yet placed advancement items so that we can apply their effects for the fill algorithm
@@ -880,10 +881,8 @@ static void AssumedFill(const std::vector<RandomizerGet>& items, const std::vect
             // If ALR is off, then we check beatability after placing the item.
             // If the game is beatable, then we can stop placing items with logic.
             if (!ctx->GetOption(RSK_ALL_LOCATIONS_REACHABLE)) {
-                ctx->playthroughBeatable = false;
                 logic->Reset();
-                CheckBeatable();
-                if (ctx->playthroughBeatable) {
+                if (CheckBeatable()) {
                     SPDLOG_DEBUG("Game beatable, now placing items randomly. " + std::to_string(itemsToPlace.size()) +
                                 " major items remaining.\n\n");
                     FastFill(itemsToPlace, GetEmptyLocations(allowedLocations), true);
@@ -1324,7 +1323,6 @@ int Fill() {
     std::vector<RandomizerGet> remainingPool = FilterAndEraseFromPool(ItemPool, [](const auto i) { return true; });
     FastFill(remainingPool, GetAllEmptyLocations(), false);
     StopPerformanceTimer(PT_REMAINING_ITEMS);
-
 
     StartPerformanceTimer(PT_PLAYTHROUGH_GENERATION);
     GeneratePlaythrough();
