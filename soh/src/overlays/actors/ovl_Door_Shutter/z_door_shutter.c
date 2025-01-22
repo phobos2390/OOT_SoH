@@ -391,6 +391,7 @@ void func_80996B0C(DoorShutter* this, PlayState* play) {
             if (this->doorType != SHUTTER_BOSS) {
                 gSaveContext.inventory.dungeonKeys[gSaveContext.mapIndex]--;
                 Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
+                GameInteractor_ExecuteOnDungeonKeyUsedHooks(gSaveContext.mapIndex);
             } else {
                 Audio_PlayActorSound2(&this->dyna.actor, NA_SE_EV_CHAIN_KEY_UNLOCK_B);
             }
@@ -660,6 +661,11 @@ void DoorShutter_Update(Actor* thisx, PlayState* play) {
         (this->actionFunc == DoorShutter_SetupType)) {
         this->actionFunc(this, play);
     }
+    // #region SOH [Co-op]
+    if (Flags_GetSwitch(play, this->dyna.actor.params & 0x3F)) {
+        DECR(this->unk_16E);
+    }
+    // #endregion
 }
 
 Gfx* func_80997838(PlayState* play, DoorShutter* this, Gfx* p) {
