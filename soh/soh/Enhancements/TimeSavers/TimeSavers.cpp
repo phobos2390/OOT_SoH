@@ -15,4 +15,5 @@ void TimeSavers_Register() {
         SkipChildRutoInteractions_Register();
     FasterHeavyBlockLift_Register();
     FasterRupeeAccumulator_Register();
+    FasterShadowShip_Register();
 }
