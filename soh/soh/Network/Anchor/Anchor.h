@@ -97,7 +97,6 @@ class Anchor : public Network {
 
     // Packet types //
     inline static const std::string ALL_CLIENT_STATE = "ALL_CLIENT_STATE";
-    inline static const std::string CONSUME_ADULT_TRADE_ITEM = "CONSUME_ADULT_TRADE_ITEM";
     inline static const std::string DAMAGE_PLAYER = "DAMAGE_PLAYER";
     inline static const std::string DISABLE_ANCHOR = "DISABLE_ANCHOR";
     inline static const std::string ENTRANCE_DISCOVERED = "ENTRANCE_DISCOVERED";
@@ -134,7 +133,6 @@ class Anchor : public Network {
     bool IsSaveLoaded();
 
     void SendPacket_ClearTeamState();
-    void SendPacket_ConsumeAdultTradeItem(u8 itemId);
     void SendPacket_DamagePlayer(u32 clientId, u8 damageEffect, u8 damage);
     void SendPacket_EntranceDiscovered(u16 entranceIndex);
     void SendPacket_GameComplete();
