@@ -1,5 +1,6 @@
 #ifdef ENABLE_REMOTE_CONTROL
 #include "SohMenu.h"
+#include "soh/Network/Anchor/Anchor.h"
 #include <soh/Notification/Notification.h>
 #include <soh/Network/Network.h>
 #include "SohGui.hpp"
@@ -75,8 +76,7 @@ void SohMenu::AddMenuNetwork() {
             if (Sail::Instance->isEnabled) {
                 CVarClear(CVAR_REMOTE_SAIL("Enabled"));
                 Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
-                Sail::Instance->Disable();
-            } else {
+                Sail::Instance->Disable(); } else {
                 CVarSetInteger(CVAR_REMOTE_SAIL("Enabled"), 1);
                 Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
                 Sail::Instance->Enable();
@@ -161,6 +161,15 @@ void SohMenu::AddMenuNetwork() {
         } else {
             info.name = "Connecting...##CrowdControl";
         }
+    });
+
+    path.sidebarName = "Anchor";
+    AddSidebarEntry("Network", path.sidebarName, 3);
+    path.column = SECTION_COLUMN_1;
+
+    AddWidget(path, "Anchor", WIDGET_CUSTOM)
+    .CustomFunction([](WidgetInfo& info) {
+        Anchor::Instance->DrawMenu();
     });
 }
 

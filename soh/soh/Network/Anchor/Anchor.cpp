@@ -13,6 +13,8 @@ extern "C" {
 extern PlayState* gPlayState;
 }
 
+using namespace UIWidgets;
+
 // MARK: - Overrides
 
 void Anchor::Enable() {
@@ -278,10 +280,10 @@ bool Anchor::IsSaveLoaded() {
 // MARK: - UI
 
 void Anchor::DrawMenu() {
-    ImGui::PushID("Anchor");
+    //ImGui::PushID("Anchor");
 
     std::string host = CVarGetString(CVAR_REMOTE_ANCHOR("Host"), "anchor.proxysaw.dev");
-    uint16_t port = CVarGetInteger(CVAR_REMOTE_ANCHOR("Port"), 43383);
+    int32_t port = CVarGetInteger(CVAR_REMOTE_ANCHOR("Port"), 43383);
     std::string anchorTeamId = CVarGetString(CVAR_REMOTE_ANCHOR("TeamId"), "default");
     std::string anchorRoomId = CVarGetString(CVAR_REMOTE_ANCHOR("RoomId"), "");
     std::string anchorName = CVarGetString(CVAR_REMOTE_ANCHOR("Name"), "");
@@ -296,14 +298,14 @@ void Anchor::DrawMenu() {
 
     ImGui::BeginDisabled(isEnabled);
     ImGui::Text("Host & Port");
-    if (UIWidgets::InputString("##Host", &host)) {
+    if (UIWidgets::InputString("Host", &host)) {
         CVarSetString(CVAR_REMOTE_ANCHOR("Host"), host.c_str());
         Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
     }
 
-    ImGui::SameLine();
+    //ImGui::SameLine();
     ImGui::SetNextItemWidth(ImGui::GetFontSize() * 5);
-    if (ImGui::InputScalar("##Port", ImGuiDataType_U16, &port)) {
+    if (UIWidgets::InputInt("Port", &port)) {
         CVarSetInteger(CVAR_REMOTE_ANCHOR("Port"), port);
         Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
     }
@@ -311,7 +313,7 @@ void Anchor::DrawMenu() {
     ImGui::Text("Tunic Color & Name");
     static Color_RGBA8 color = CVarGetColor(CVAR_REMOTE_ANCHOR("Color"), { 100, 255, 100, 255 });
     static ImVec4 colorVec = ImVec4(color.r / 255.0, color.g / 255.0, color.b / 255.0, 1);
-    if (ImGui::ColorEdit3("##Color", (float*)&colorVec,
+    if (ImGui::ColorEdit3("Color", (float*)&colorVec,
                           ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel)) {
         color.r = colorVec.x * 255.0;
         color.g = colorVec.y * 255.0;
@@ -322,19 +324,19 @@ void Anchor::DrawMenu() {
     }
     ImGui::SameLine();
     ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
-    if (UIWidgets::InputString("##Name", &anchorName)) {
+    if (UIWidgets::InputString("Name", &anchorName)) {
         CVarSetString(CVAR_REMOTE_ANCHOR("Name"), anchorName.c_str());
         Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
     }
     ImGui::Text("Room ID");
     ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
-    if (UIWidgets::InputString("##RoomId", &anchorRoomId, isEnabled ? ImGuiInputTextFlags_Password : 0)) {
+    if (UIWidgets::InputString("RoomId", &anchorRoomId/*, isEnabled ? ImGuiInputTextFlags_Password : 0*/)) {
         CVarSetString(CVAR_REMOTE_ANCHOR("RoomId"), anchorRoomId.c_str());
         Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
     }
     ImGui::Text("Team ID (Items & Flags Shared)");
     ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
-    if (UIWidgets::InputString("##TeamId", &anchorTeamId)) {
+    if (UIWidgets::InputString("TeamId", &anchorTeamId)) {
         CVarSetString(CVAR_REMOTE_ANCHOR("TeamId"), anchorTeamId.c_str());
         Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
     }
@@ -364,19 +366,28 @@ void Anchor::DrawMenu() {
 
             if (roomState.ownerClientId == ownClientId) {
                 if (ImGui::BeginMenu("Room Settings")) {
-                    ImGui::Text("PvP Mode:");
-                    static const char* pvpModes[3] = { "Off", "On", "On + Friendly Fire" };
-                    if (UIWidgets::EnhancementCombobox(CVAR_REMOTE_ANCHOR("RoomSettings.PvpMode"), pvpModes, 1)) {
+                    static const std::unordered_map<int32_t, const char*> pvpModes = {{0, "Off"}, {1, "On"}, {2, "On + Friendly Fire"} };
+                    if (UIWidgets::CVarCombobox("PvP Mode", CVAR_REMOTE_ANCHOR("RoomSettings.PvpMode"),
+                                pvpModes,
+                                ComboboxOptions()
+                                    .ComboMap(pvpModes)
+                                    .DefaultIndex(1))) {
                         SendPacket_UpdateRoomState();
                     }
-                    ImGui::Text("Show Locations For:");
-                    static const char* showLocationsModes[3] = { "None", "Team Only", "All" };
-                    if (UIWidgets::EnhancementCombobox(CVAR_REMOTE_ANCHOR("RoomSettings.ShowLocationsMode"), showLocationsModes, 1)) {
+                    static const std::unordered_map<int32_t, const char*> showLocationsModes = {{0, "None"}, {1, "Team Only"}, {2, "All"} };
+                    if (UIWidgets::CVarCombobox("Show Locations For", CVAR_REMOTE_ANCHOR("RoomSettings.ShowLocationsMode"),
+                                showLocationsModes,
+                                ComboboxOptions()
+                                    .ComboMap(showLocationsModes)
+                                    .DefaultIndex(1))) {
                         SendPacket_UpdateRoomState();
                     }
-                    ImGui::Text("Allow Teleporting To:");
-                    static const char* teleportModes[3] = { "None", "Team Only", "All" };
-                    if (UIWidgets::EnhancementCombobox(CVAR_REMOTE_ANCHOR("RoomSettings.TeleportMode"), teleportModes, 1)) {
+                    static const std::unordered_map<int32_t, const char*> teleportModes = {{0, "None"}, {1, "Team Only"}, {2, "All"} };
+                    if (UIWidgets::CVarCombobox("Allow Teleporting To", CVAR_REMOTE_ANCHOR("RoomSettings.TeleportMode"),
+                                teleportModes,
+                                ComboboxOptions()
+                                    .ComboMap(teleportModes)
+                                    .DefaultIndex(1))) {
                         SendPacket_UpdateRoomState();
                     }
                     ImGui::EndMenu();
@@ -398,7 +409,6 @@ void Anchor::DrawMenu() {
         }
     }
 
-    ImGui::PopID();
 }
 
 #endif
