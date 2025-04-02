@@ -1,8 +1,8 @@
 #include "soh/Enhancements/game-interactor/GameInteractor.h"
 
 extern "C" {
-    #include "functions.h"
-    #include "src/overlays/actors/ovl_Bg_Haka_Ship/z_bg_haka_ship.h"
+#include "functions.h"
+#include "src/overlays/actors/ovl_Bg_Haka_Ship/z_bg_haka_ship.h"
 }
 
 void FasterShadowShip_Register() {
