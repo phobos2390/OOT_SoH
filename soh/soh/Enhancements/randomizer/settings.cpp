@@ -215,7 +215,7 @@ void Settings::CreateOptions() {
     OPT_BOOL(RSK_SHUFFLE_GERUDO_MEMBERSHIP_CARD, "Shuffle Gerudo Membership Card", CVAR_RANDOMIZER_SETTING("ShuffleGerudoToken"), mOptionDescriptions[RSK_SHUFFLE_GERUDO_MEMBERSHIP_CARD]);
     OPT_U8(RSK_SHUFFLE_POTS, "Shuffle Pots", {"Off", "Dungeons", "Overworld", "All Pots"}, OptionCategory::Setting, CVAR_RANDOMIZER_SETTING("ShufflePots"), mOptionDescriptions[RSK_SHUFFLE_POTS], WidgetType::Combobox, RO_SHUFFLE_POTS_OFF);
     OPT_U8(RSK_SHUFFLE_GRASS, "Shuffle Grass", {"Off", "Dungeons", "Overworld", "All Grass/Bushes"}, OptionCategory::Setting, CVAR_RANDOMIZER_SETTING("ShuffleGrass"), mOptionDescriptions[RSK_SHUFFLE_GRASS], WidgetType::Combobox, RO_SHUFFLE_GRASS_OFF);
-	OPT_U8(RSK_SHUFFLE_CRATES, "Shuffle Crates", {"Off", "Dungeons", "Overworld", "All Crates"}, OptionCategory::Setting, CVAR_RANDOMIZER_SETTING("ShuffleCrates"), mOptionDescriptions[RSK_SHUFFLE_CRATES], WidgetType::Combobox, RO_SHUFFLE_CRATES_OFF);	
+    OPT_U8(RSK_SHUFFLE_CRATES, "Shuffle Crates", {"Off", "Dungeons", "Overworld", "All Crates"}, OptionCategory::Setting, CVAR_RANDOMIZER_SETTING("ShuffleCrates"), mOptionDescriptions[RSK_SHUFFLE_CRATES], WidgetType::Combobox, RO_SHUFFLE_CRATES_OFF);
     OPT_BOOL(RSK_SHUFFLE_ROCKS, "Shuffle Rocks", CVAR_RANDOMIZER_SETTING("ShuffleRocks"), mOptionDescriptions[RSK_SHUFFLE_ROCKS]);
     OPT_U8(RSK_SHUFFLE_BOULDERS, "Shuffle Boulders", {"Off", "Dungeons", "Overworld", "All Boulders"}, OptionCategory::Setting, CVAR_RANDOMIZER_SETTING("ShuffleBoulders"), mOptionDescriptions[RSK_SHUFFLE_BOULDERS], WidgetType::Combobox, RO_SHUFFLE_BOULDERS_OFF);
     OPT_BOOL(RSK_SHUFFLE_FISHING_POLE, "Shuffle Fishing Pole", CVAR_RANDOMIZER_SETTING("ShuffleFishingPole"), mOptionDescriptions[RSK_SHUFFLE_FISHING_POLE]);
