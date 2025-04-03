@@ -2579,7 +2579,8 @@ void Player_ProcessItemButtons(Player* this, PlayState* play) {
                 (item != ITEM_NAYRUS_LOVE || !CVarGetInteger(CVAR_ENHANCEMENT("RocsFeather"), 0))) {
             this->heldItemButton = i;
             Player_UseItem(play, this, item);
-        } else if (this->rocUseCount == 0) {
+        } else if (item == ITEM_NAYRUS_LOVE && CVarGetInteger(CVAR_ENHANCEMENT("RocsFeather"), 0) &&
+                this->rocUseCount == 0) {
             this->rocUseCount++;
             this->linearVelocity = 5.0f;
             this->actor.velocity.y = 8.0f;
