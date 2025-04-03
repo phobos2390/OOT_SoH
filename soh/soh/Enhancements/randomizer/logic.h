@@ -185,6 +185,7 @@ class Logic {
 
     SaveContext* mSaveContext = nullptr;
     Logic();
+    bool IsNNL();
     bool CanUse(RandomizerGet itemName);
     bool HasProjectile(HasProjectileAge age);
     bool HasItem(RandomizerGet itemName);

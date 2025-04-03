@@ -10,8 +10,8 @@ void RegionTable_Init_BottomOfTheWell() {
     areaTable[RR_BOTTOM_OF_THE_WELL_ENTRYWAY] = Region("Bottom of the Well Entryway", "Bottom of the Well", {RA_BOTTOM_OF_THE_WELL}, NO_DAY_NIGHT_CYCLE, {}, {}, {
         //Exits
         //Technically involves an fake wall, but passing it lensless is intended in vanilla and it is well telegraphed
-        Entrance(RR_BOTTOM_OF_THE_WELL_PERIMETER,    []{return ctx->GetDungeon(Rando::BOTTOM_OF_THE_WELL)->IsVanilla() && logic->IsChild && logic->CanPassEnemy(RE_BIG_SKULLTULA);}),
-        Entrance(RR_BOTTOM_OF_THE_WELL_MQ_PERIMETER, []{return ctx->GetDungeon(Rando::BOTTOM_OF_THE_WELL)->IsMQ()      && logic->IsChild;}),
+        Entrance(RR_BOTTOM_OF_THE_WELL_PERIMETER,    []{return ctx->GetDungeon(Rando::BOTTOM_OF_THE_WELL)->IsVanilla() && logic->IsChild && logic->CanPassEnemy(RE_BIG_SKULLTULA);}, true),
+        Entrance(RR_BOTTOM_OF_THE_WELL_MQ_PERIMETER, []{return ctx->GetDungeon(Rando::BOTTOM_OF_THE_WELL)->IsMQ()      && logic->IsChild;}, true),
         Entrance(RR_KAK_WELL,                        []{return true;}),
     });
 
@@ -21,24 +21,24 @@ void RegionTable_Init_BottomOfTheWell() {
         //Events
         EventAccess(&logic->StickPot,               []{return true;}),
         EventAccess(&logic->NutPot,                 []{return true;}),
-        EventAccess(&logic->LoweredWaterInsideBotw, []{return logic->CanUse(RG_ZELDAS_LULLABY);}),
+        EventAccess(&logic->LoweredWaterInsideBotw, []{return logic->CanUse(RG_ZELDAS_LULLABY);}, true),
     }, {
         //Locations
         LOCATION(RC_BOTTOM_OF_THE_WELL_FRONT_CENTER_BOMBABLE_CHEST,  logic->HasExplosives()),
-        LOCATION(RC_BOTTOM_OF_THE_WELL_FREESTANDING_KEY,             (logic->HasItem(RG_BRONZE_SCALE) || logic->LoweredWaterInsideBotw) && logic->CanUse(RG_STICKS) || logic->CanUse(RG_DINS_FIRE)),
+        LOCATION(RC_BOTTOM_OF_THE_WELL_FREESTANDING_KEY,             (logic->HasItem(RG_BRONZE_SCALE) || logic->LoweredWaterInsideBotw) && (logic->IsNNL() || logic->CanUse(RG_STICKS) || logic->CanUse(RG_DINS_FIRE))),
         LOCATION(RC_BOTTOM_OF_THE_WELL_UNDERWATER_FRONT_CHEST,       logic->LoweredWaterInsideBotw),
         LOCATION(RC_BOTTOM_OF_THE_WELL_UNDERWATER_LEFT_CHEST,        logic->LoweredWaterInsideBotw),
         LOCATION(RC_BOTTOM_OF_THE_WELL_NEAR_ENTRANCE_POT_1,          logic->CanBreakPots()),
         LOCATION(RC_BOTTOM_OF_THE_WELL_NEAR_ENTRANCE_POT_2,          logic->CanBreakPots()),
-        LOCATION(RC_BOTTOM_OF_THE_WELL_UNDERWATER_POT,               (logic->CanBreakPots() && logic->LoweredWaterInsideBotw) || logic->CanUse(RG_BOOMERANG)),
+        LOCATION_NNL(RC_BOTTOM_OF_THE_WELL_UNDERWATER_POT,           (logic->CanBreakPots() && logic->LoweredWaterInsideBotw) || logic->CanUse(RG_BOOMERANG)),
     }, {
         //Exits
         Entrance(RR_BOTTOM_OF_THE_WELL_ENTRYWAY,          []{return logic->IsChild && logic->CanPassEnemy(RE_BIG_SKULLTULA);}),
         Entrance(RR_BOTTOM_OF_THE_WELL_BEHIND_FAKE_WALLS, []{return ctx->GetTrickOption(RT_LENS_BOTW) || logic->CanUse(RG_LENS_OF_TRUTH);}),
         Entrance(RR_BOTTOM_OF_THE_WELL_SOUTHWEST_ROOM,    []{return ctx->GetTrickOption(RT_LENS_BOTW) || logic->CanUse(RG_LENS_OF_TRUTH);}),
         Entrance(RR_BOTTOM_OF_THE_WELL_KEESE_BEAMOS_ROOM, []{return logic->IsChild && logic->SmallKeys(RR_BOTTOM_OF_THE_WELL, 3);}),
-        Entrance(RR_BOTTOM_OF_THE_WELL_COFFIN_ROOM,       []{return logic->LoweredWaterInsideBotw || logic->HasItem(RG_BRONZE_SCALE);}),
-        Entrance(RR_BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM,    []{return logic->LoweredWaterInsideBotw && logic->IsChild;}),
+        Entrance(RR_BOTTOM_OF_THE_WELL_COFFIN_ROOM,       []{return logic->LoweredWaterInsideBotw || logic->HasItem(RG_BRONZE_SCALE);}, true),
+        Entrance(RR_BOTTOM_OF_THE_WELL_DEAD_HAND_ROOM,    []{return logic->LoweredWaterInsideBotw && logic->IsChild;}, true),
         //Falling down into basement requires nothing, but falling down somewhere specific requires lens or lens trick
         //kinda questionable given several drops are blocked by rocks, but that's how it was handled before and on N64
         Entrance(RR_BOTTOM_OF_THE_WELL_BASEMENT,          []{return true;}),
@@ -144,7 +144,7 @@ void RegionTable_Init_BottomOfTheWell() {
         LOCATION(RC_BOTTOM_OF_THE_WELL_BASEMENT_POT_10,               logic->CanBreakPots()),
         LOCATION(RC_BOTTOM_OF_THE_WELL_BASEMENT_POT_11,               logic->CanBreakPots()),
         LOCATION(RC_BOTTOM_OF_THE_WELL_BASEMENT_POT_12,               logic->CanBreakPots()),
-        LOCATION(RC_BOTTOM_OF_THE_WELL_BASEMENT_SUN_FAIRY,            logic->CanUse(RG_SUNS_SONG)),
+        LOCATION_NNL(RC_BOTTOM_OF_THE_WELL_BASEMENT_SUN_FAIRY,        logic->CanUse(RG_SUNS_SONG)),
         LOCATION(RC_BOTTOM_OF_THE_WELL_BASEMENT_GRASS_1,              logic->CanCutShrubs()),
         LOCATION(RC_BOTTOM_OF_THE_WELL_BASEMENT_GRASS_2,              logic->CanCutShrubs()),
         LOCATION(RC_BOTTOM_OF_THE_WELL_BASEMENT_GRASS_3,              logic->CanCutShrubs()),
@@ -247,10 +247,10 @@ void RegionTable_Init_BottomOfTheWell() {
         //Locations
         LOCATION(RC_BOTTOM_OF_THE_WELL_MQ_COMPASS_CHEST,              logic->CanKillEnemy(RE_DEAD_HAND)),
         LOCATION(RC_BOTTOM_OF_THE_WELL_MQ_DEAD_HAND_FREESTANDING_KEY, logic->HasExplosives() || (ctx->GetTrickOption(RT_BOTW_MQ_DEADHAND_KEY) && logic->CanUse(RG_BOOMERANG))),
-        LOCATION(RC_BOTTOM_OF_THE_WELL_MQ_DEAD_HAND_GRASS_1,          logic->CanCutShrubs()),
-        LOCATION(RC_BOTTOM_OF_THE_WELL_MQ_DEAD_HAND_GRASS_2,          logic->CanCutShrubs()),
-        LOCATION(RC_BOTTOM_OF_THE_WELL_MQ_DEAD_HAND_GRASS_3,          logic->CanCutShrubs()),
-        LOCATION(RC_BOTTOM_OF_THE_WELL_MQ_DEAD_HAND_GRASS_4,          logic->CanCutShrubs()),
+        LOCATION_NNL(RC_BOTTOM_OF_THE_WELL_MQ_DEAD_HAND_GRASS_1,      logic->CanCutShrubs()),
+        LOCATION_NNL(RC_BOTTOM_OF_THE_WELL_MQ_DEAD_HAND_GRASS_2,      logic->CanCutShrubs()),
+        LOCATION_NNL(RC_BOTTOM_OF_THE_WELL_MQ_DEAD_HAND_GRASS_3,      logic->CanCutShrubs()),
+        LOCATION_NNL(RC_BOTTOM_OF_THE_WELL_MQ_DEAD_HAND_GRASS_4,      logic->CanCutShrubs()),
     }, {
         //Exits
         //This assumes we spawned in dead hand's room, if whatever trick made this relevant instead puts us in the previous room, remove the kill Dead Hand check.
@@ -276,7 +276,7 @@ void RegionTable_Init_BottomOfTheWell() {
         LOCATION(RC_BOTTOM_OF_THE_WELL_MQ_EAST_INNER_ROOM_POT_1, logic->CanBreakPots()),
         LOCATION(RC_BOTTOM_OF_THE_WELL_MQ_EAST_INNER_ROOM_POT_2, logic->CanBreakPots()),
         LOCATION(RC_BOTTOM_OF_THE_WELL_MQ_EAST_INNER_ROOM_POT_3, logic->CanBreakPots()),
-        LOCATION(RC_BOTTOM_OF_THE_WELL_MQ_CELL_SUN_FAIRY,        logic->CanUse(RG_SUNS_SONG)),
+        LOCATION_NNL(RC_BOTTOM_OF_THE_WELL_MQ_CELL_SUN_FAIRY,    logic->CanUse(RG_SUNS_SONG)),
     }, {
         //Exits
         //If a relevant trick causes you to be able to warp into here without going through PERIMETER, a new eventAccess will be needed for lowering the gates with ZL
@@ -291,7 +291,7 @@ void RegionTable_Init_BottomOfTheWell() {
         LOCATION(RC_BOTTOM_OF_THE_WELL_MQ_BASEMENT_HALLWAY_FRONT_HEART, true),
         LOCATION(RC_BOTTOM_OF_THE_WELL_MQ_BASEMENT_HALLWAY_LEFT_HEART,  true),
         LOCATION(RC_BOTTOM_OF_THE_WELL_MQ_BASEMENT_HALLWAY_RIGHT_HEART, true),
-        LOCATION(RC_BOTTOM_OF_THE_WELL_MQ_BASEMENT_SUN_FAIRY,           logic->CanUse(RG_SUNS_SONG)),
+        LOCATION_NNL(RC_BOTTOM_OF_THE_WELL_MQ_BASEMENT_SUN_FAIRY,       logic->CanUse(RG_SUNS_SONG)),
     }, {
         //Exits
         Entrance(RR_BOTTOM_OF_THE_WELL_MQ_PERIMETER, []{return true;}),

@@ -9,8 +9,8 @@ void RegionTable_Init_DekuTree() {
     // Vanilla/MQ Decider
     areaTable[RR_DEKU_TREE_ENTRYWAY] = Region("Deku Tree Entryway", "Deku Tree", {RA_DEKU_TREE}, NO_DAY_NIGHT_CYCLE, {}, {}, {
         //Exits
-        Entrance(RR_DEKU_TREE_LOBBY,      []{return ctx->GetDungeon(DEKU_TREE)->IsVanilla();}),
-        Entrance(RR_DEKU_TREE_MQ_1F,      []{return ctx->GetDungeon(DEKU_TREE)->IsMQ();}),
+        Entrance(RR_DEKU_TREE_LOBBY,      []{return ctx->GetDungeon(DEKU_TREE)->IsVanilla();}, true),
+        Entrance(RR_DEKU_TREE_MQ_1F,      []{return ctx->GetDungeon(DEKU_TREE)->IsMQ();}, true),
         Entrance(RR_KF_OUTSIDE_DEKU_TREE, []{return true;}),
     });
 
@@ -173,12 +173,12 @@ void RegionTable_Init_DekuTree() {
 
     areaTable[RR_DEKU_TREE_OUTSIDE_BOSS_ROOM] = Region("Deku Tree Outside Boss Room", "Deku Tree", {RA_DEKU_TREE}, NO_DAY_NIGHT_CYCLE, {}, {
         //Locations
-        LOCATION(RC_DEKU_TREE_BEFORE_BOSS_LEFT_HEART,       logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || logic->CanUse(RG_BOOMERANG)),
-        LOCATION(RC_DEKU_TREE_BEFORE_BOSS_MIDDLE_HEART,     logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || logic->CanUse(RG_BOOMERANG)),
-        LOCATION(RC_DEKU_TREE_BEFORE_BOSS_RIGHT_HEART,      logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || logic->CanUse(RG_BOOMERANG)),
-        LOCATION(RC_DEKU_TREE_BEFORE_BOSS_GRASS_1,          logic->CanCutShrubs() && logic->HasFireSourceWithTorch()),
-        LOCATION(RC_DEKU_TREE_BEFORE_BOSS_GRASS_2,          logic->CanCutShrubs() && logic->HasFireSourceWithTorch()),
-        LOCATION(RC_DEKU_TREE_BEFORE_BOSS_GRASS_3,          logic->CanCutShrubs() && logic->HasFireSourceWithTorch()),
+        LOCATION_NNL(RC_DEKU_TREE_BEFORE_BOSS_LEFT_HEART,       logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || logic->CanUse(RG_BOOMERANG)),
+        LOCATION_NNL(RC_DEKU_TREE_BEFORE_BOSS_MIDDLE_HEART,     logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || logic->CanUse(RG_BOOMERANG)),
+        LOCATION_NNL(RC_DEKU_TREE_BEFORE_BOSS_RIGHT_HEART,      logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || logic->CanUse(RG_BOOMERANG)),
+        LOCATION_NNL(RC_DEKU_TREE_BEFORE_BOSS_GRASS_1,          logic->CanCutShrubs() && logic->HasFireSourceWithTorch()),
+        LOCATION_NNL(RC_DEKU_TREE_BEFORE_BOSS_GRASS_2,          logic->CanCutShrubs() && logic->HasFireSourceWithTorch()),
+        LOCATION_NNL(RC_DEKU_TREE_BEFORE_BOSS_GRASS_3,          logic->CanCutShrubs() && logic->HasFireSourceWithTorch()),
     }, {
         //Exits
         Entrance(RR_DEKU_TREE_BASEMENT_UPPER, []{return true;}),
@@ -406,10 +406,10 @@ void RegionTable_Init_DekuTree() {
         EventAccess(&logic->PushedDekuBasementBlock, []{return true;}),
     }, {
         //Locations
-        LOCATION(RC_DEKU_TREE_MQ_DEKU_SCRUB,             logic->CanStunDeku()),
-        LOCATION(RC_DEKU_TREE_MQ_BASEMENT_UPPER_GRASS_1, logic->CanCutShrubs()),
-        LOCATION(RC_DEKU_TREE_MQ_BASEMENT_UPPER_GRASS_2, logic->CanCutShrubs()),
-        LOCATION(RC_DEKU_TREE_MQ_BASEMENT_UPPER_GRASS_3, logic->CanCutShrubs()),
+        LOCATION(RC_DEKU_TREE_MQ_DEKU_SCRUB,                 logic->CanStunDeku()),
+        LOCATION_NNL(RC_DEKU_TREE_MQ_BASEMENT_UPPER_GRASS_1, logic->CanCutShrubs()),
+        LOCATION_NNL(RC_DEKU_TREE_MQ_BASEMENT_UPPER_GRASS_2, logic->CanCutShrubs()),
+        LOCATION_NNL(RC_DEKU_TREE_MQ_BASEMENT_UPPER_GRASS_3, logic->CanCutShrubs()),
     }, {
         //Exits
         Entrance(RR_DEKU_TREE_MQ_BASEMENT_GRAVE_ROOM, []{return logic->IsChild;}),
@@ -421,12 +421,12 @@ void RegionTable_Init_DekuTree() {
 
     areaTable[RR_DEKU_TREE_MQ_OUTSIDE_BOSS_ROOM] = Region("Deku Tree MQ Outside Boss Room", "Deku Tree", {RA_DEKU_TREE}, NO_DAY_NIGHT_CYCLE, {}, {
         //Locations
-        LOCATION(RC_DEKU_TREE_MQ_BEFORE_BOSS_LEFT_HEART,   logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || logic->CanUse(RG_BOOMERANG)),
-        LOCATION(RC_DEKU_TREE_MQ_BEFORE_BOSS_MIDDLE_HEART, logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || logic->CanUse(RG_BOOMERANG)),
-        LOCATION(RC_DEKU_TREE_MQ_BEFORE_BOSS_RIGHT_HEART,  logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || logic->CanUse(RG_BOOMERANG)),
-        LOCATION(RC_DEKU_TREE_MQ_BEFORE_BOSS_GRASS_1,      logic->CanCutShrubs()),
-        LOCATION(RC_DEKU_TREE_MQ_BEFORE_BOSS_GRASS_2,      logic->CanCutShrubs()),
-        LOCATION(RC_DEKU_TREE_MQ_BEFORE_BOSS_GRASS_3,      logic->CanCutShrubs()),
+        LOCATION_NNL(RC_DEKU_TREE_MQ_BEFORE_BOSS_LEFT_HEART,   logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || logic->CanUse(RG_BOOMERANG)),
+        LOCATION_NNL(RC_DEKU_TREE_MQ_BEFORE_BOSS_MIDDLE_HEART, logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || logic->CanUse(RG_BOOMERANG)),
+        LOCATION_NNL(RC_DEKU_TREE_MQ_BEFORE_BOSS_RIGHT_HEART,  logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_IRON_BOOTS) || logic->CanUse(RG_BOOMERANG)),
+        LOCATION_NNL(RC_DEKU_TREE_MQ_BEFORE_BOSS_GRASS_1,      logic->CanCutShrubs()),
+        LOCATION_NNL(RC_DEKU_TREE_MQ_BEFORE_BOSS_GRASS_2,      logic->CanCutShrubs()),
+        LOCATION_NNL(RC_DEKU_TREE_MQ_BEFORE_BOSS_GRASS_3,      logic->CanCutShrubs()),
     }, {
         //Exits
         Entrance(RR_DEKU_TREE_MQ_BASEMENT_LEDGE, []{return logic->HasItem(RG_BRONZE_SCALE) || logic->CanUse(RG_HOOKSHOT);}),
@@ -438,8 +438,8 @@ void RegionTable_Init_DekuTree() {
     // Boss Room
     areaTable[RR_DEKU_TREE_BOSS_ENTRYWAY] = Region("Deku Tree Boss Entryway", "Deku Tree", {RA_DEKU_TREE}, NO_DAY_NIGHT_CYCLE, {}, {}, {
         // Exits
-        Entrance(RR_DEKU_TREE_OUTSIDE_BOSS_ROOM,    []{return ctx->GetDungeon(DEKU_TREE)->IsVanilla();}),
-        Entrance(RR_DEKU_TREE_MQ_OUTSIDE_BOSS_ROOM, []{return ctx->GetDungeon(DEKU_TREE)->IsMQ();}),
+        Entrance(RR_DEKU_TREE_OUTSIDE_BOSS_ROOM,    []{return ctx->GetDungeon(DEKU_TREE)->IsVanilla();}, true),
+        Entrance(RR_DEKU_TREE_MQ_OUTSIDE_BOSS_ROOM, []{return ctx->GetDungeon(DEKU_TREE)->IsMQ();}, true),
         Entrance(RR_DEKU_TREE_BOSS_ROOM,            []{return true;}),
     });
 
@@ -448,20 +448,20 @@ void RegionTable_Init_DekuTree() {
         EventAccess(&logic->DekuTreeClear, []{return logic->DekuTreeClear || logic->CanKillEnemy(RE_GOHMA);}),
     }, {
         // Locations
-        LOCATION(RC_QUEEN_GOHMA,                   logic->DekuTreeClear),
-        LOCATION(RC_DEKU_TREE_QUEEN_GOHMA_HEART,   logic->DekuTreeClear),
-        LOCATION(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_1, logic->CanCutShrubs()),
-        LOCATION(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_2, logic->CanCutShrubs()),
-        LOCATION(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_3, logic->CanCutShrubs()),
-        LOCATION(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_4, logic->CanCutShrubs()),
-        LOCATION(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_5, logic->CanCutShrubs()),
-        LOCATION(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_6, logic->CanCutShrubs()),
-        LOCATION(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_7, logic->CanCutShrubs()),
-        LOCATION(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_8, logic->CanCutShrubs()),
+        LOCATION_NNL(RC_QUEEN_GOHMA,                   logic->DekuTreeClear),
+        LOCATION_NNL(RC_DEKU_TREE_QUEEN_GOHMA_HEART,   logic->DekuTreeClear),
+        LOCATION_NNL(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_1, logic->CanCutShrubs()),
+        LOCATION_NNL(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_2, logic->CanCutShrubs()),
+        LOCATION_NNL(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_3, logic->CanCutShrubs()),
+        LOCATION_NNL(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_4, logic->CanCutShrubs()),
+        LOCATION_NNL(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_5, logic->CanCutShrubs()),
+        LOCATION_NNL(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_6, logic->CanCutShrubs()),
+        LOCATION_NNL(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_7, logic->CanCutShrubs()),
+        LOCATION_NNL(RC_DEKU_TREE_QUEEN_GOHMA_GRASS_8, logic->CanCutShrubs()),
     }, {
         // Exits
         Entrance(RR_DEKU_TREE_BOSS_ENTRYWAY, []{return true;}),
-        Entrance(RR_KF_OUTSIDE_DEKU_TREE,    []{return logic->DekuTreeClear;}, false),
+        Entrance(RR_KF_OUTSIDE_DEKU_TREE,    []{return logic->DekuTreeClear;}, true, false),
     });
 
     // clang-format on
