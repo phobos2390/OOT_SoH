@@ -293,14 +293,8 @@ void Audio_ProcessNotes(void) {
 
             f32 resampRate = gAudioContext.audioBufferParameters.resampleRate;
 
-            // CUSTOM SAMPLE CHECK
-            if (!noteSubEu2->bitField1.isSyntheticWave && noteSubEu2->sound.soundFontSound != NULL &&
-                noteSubEu2->sound.soundFontSound->sample != NULL &&
-                noteSubEu2->sound.soundFontSound->sample->sampleRateMagicValue == 'RIFF') {
-                resampRate = CALC_RESAMPLE_FREQ(noteSubEu2->sound.soundFontSound->sample->sampleRate);
-            }
-
             subAttrs.frequency *= resampRate;
+
 
             subAttrs.velocity *= scale;
             Audio_InitNoteSub(note, noteSubEu2, &subAttrs);
@@ -335,7 +329,7 @@ Instrument* Audio_GetInstrumentInner(s32 fontId, s32 instId) {
     }
 
     int instCnt = 0;
-    SoundFont* sf = ResourceMgr_LoadAudioSoundFont(fontMap[fontId]);
+    SoundFont* sf = ResourceMgr_LoadAudioSoundFontByName(fontMap[fontId]);
 
     if (instId >= sf->numInstruments)
         return NULL;
@@ -362,11 +356,12 @@ Drum* Audio_GetDrum(s32 fontId, s32 drumId) {
         return NULL;
     }
 
-    SoundFont* sf = ResourceMgr_LoadAudioSoundFont(fontMap[fontId]);
+    
+    SoundFont* sf = ResourceMgr_LoadAudioSoundFontByName(fontMap[fontId]);
     if (drumId < sf->numDrums) {
         drum = sf->drums[drumId];
     }
-
+    
     if (drum == NULL) {
         gAudioContext.audioErrorFlags = ((fontId << 8) + drumId) + 0x5000000;
     }
@@ -386,7 +381,7 @@ SoundFontSound* Audio_GetSfx(s32 fontId, s32 sfxId) {
         return NULL;
     }
 
-    SoundFont* sf = ResourceMgr_LoadAudioSoundFont(fontMap[fontId]);
+    SoundFont* sf = ResourceMgr_LoadAudioSoundFontByName(fontMap[fontId]);
     if (sfxId < sf->numSfx) {
         sfx = &sf->soundEffects[sfxId];
     }
