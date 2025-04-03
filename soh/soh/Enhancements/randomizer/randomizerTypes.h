@@ -291,6 +291,8 @@ typedef enum {
     RCTYPE_CRATE,                      // Crates
     RCTYPE_NLCRATE,                    // NL Crates
     RCTYPE_SMALL_CRATE,                // Small crates
+
+    RCTYPE_TREE,                       // Trees
     RCTYPE_DUNGEON_REWARD,             // Dungeon rewards (blue warps)
     RCTYPE_OCARINA,                    // Ocarina locations
     RCTYPE_BEEHIVE,                    // Beehives
@@ -2596,6 +2598,43 @@ typedef enum {
     RC_SPIRIT_TEMPLE_MQ_STATUE_SMALL_CRATE,
     RC_SPIRIT_TEMPLE_MQ_BEAMOS_SMALL_CRATE,
     // End Crates
+
+    // Start Trees
+    RC_HF_NEAR_KAK_TREE,
+    RC_HF_SOUTH_TREE,
+    RC_HF_NEAR_LLR_TREE,
+    RC_HF_NEAR_LH_TREE,
+    RC_HF_NEAR_GV_TREE,
+    RC_HF_NEAR_ZR_TREE,
+    RC_HF_NEAR_KAK_S_TREE,
+    RC_MARKET_DAY_TREE,
+    RC_HC_NEAR_GUARDS_TREE_5,
+    RC_HC_NEAR_GUARDS_TREE_4,
+    RC_HC_NEAR_GUARDS_TREE_3,
+    RC_HC_NEAR_GUARDS_TREE_2,
+    RC_HC_NEAR_GUARDS_TREE_1,
+    RC_HF_SOUTH_TREE_1,
+    RC_HF_NORTHWEST_TREE_2,
+    RC_HF_SOUTHEAST_TREE_4,
+    RC_HF_NORTHWEST_TREE_1,
+    RC_HF_EAST_TREE_1,
+    RC_HF_SOUTHEAST_TREE_3,
+    RC_HF_SOUTHEAST_TREE_2,
+    RC_HF_NEAR_HC_GROTTO_TREE_3,
+    RC_HF_SOUTHEAST_TREE_1,
+    RC_HF_TREE_YELLOW_GROTTO_TREE,
+    RC_HF_TREE_NEAR_HC_GROTTO_2,
+    RC_HF_TREE_NEAR_HC_GROTTO_1,
+    RC_ZF_TREE,
+    RC_ZR_TREE,
+    RC_KAK_TREE,
+    RC_LLR_TREE,
+    RC_HF_ADULT_NEAR_GV_TREE,
+    RC_HC_SKULLTULA_TREE,
+    RC_HC_NEAR_GUARDS_TREE,
+    RC_HC_GROTTO_TREE,
+
+    // End Trees
 
     RC_PIERRE,
     RC_DELIVER_RUTOS_LETTER,
@@ -5407,6 +5446,15 @@ typedef enum {
     RHT_CRATE_SPIRIT_TEMPLE,
     RHT_CRATE_SHADOW_TEMPLE,
     RHT_CRATE_GERUDO_TRAINING_GROUND,
+
+    // Shuffle Trees
+    RHT_TREE_HYRULE_FIELD,
+    RHT_TREE_MARKET,
+    RHT_TREE_HYRULE_CASTLE,
+    RHT_TREE_ZORAS_FOUNTAIN,
+    RHT_TREE_ZORAS_RIVER,
+    RHT_TREE_LON_LON_RANCH,
+    RHT_TREE_KAKARIKO,
     // Ganon Line
     RHT_GANON_JOKE01,
     RHT_GANON_JOKE02,
@@ -5745,6 +5793,8 @@ typedef enum {
     RSK_SHUFFLE_GERUDO_MEMBERSHIP_CARD,
     RSK_SHUFFLE_POTS,
     RSK_SHUFFLE_CRATES,
+
+    RSK_SHUFFLE_TREES,
     RSK_SHUFFLE_FROG_SONG_RUPEES,
     RSK_ITEM_POOL,
     RSK_ICE_TRAPS,
@@ -6241,6 +6291,12 @@ typedef enum {
     RO_SHUFFLE_CRATES_ALL,
 } RandoOptionShuffleCrates;
 
+// Shuffle Tree settings (off, on)
+typedef enum {
+    RO_SHUFFLE_TREES_OFF,
+    RO_SHUFFLE_TREES_ON,
+} RandoOptionShuffleTrees;
+
 // Link's Pocket Settings (dungeon reward, advancement, anything, nothing)
 typedef enum {
     RO_LINKS_POCKET_DUNGEON_REWARD,
@@ -6330,6 +6386,11 @@ typedef struct PotIdentity {
     RandomizerInf randomizerInf;
     RandomizerCheck randomizerCheck;
 } PotIdentity;
+
+typedef struct TreeIdentity {
+    RandomizerInf randomizerInf;
+    RandomizerCheck randomizerCheck;
+} TreeIdentity;
 
 typedef struct FishIdentity {
     RandomizerInf randomizerInf;

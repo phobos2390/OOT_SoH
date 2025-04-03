@@ -12,6 +12,26 @@ void RegionTable_Init_HyruleField() {
         //Locations
         LOCATION(RC_HF_OCARINA_OF_TIME_ITEM,   logic->IsChild && logic->StoneCount() == 3 && logic->HasItem(RG_BRONZE_SCALE)),
         LOCATION(RC_SONG_FROM_OCARINA_OF_TIME, logic->IsChild && logic->StoneCount() == 3 && logic->HasItem(RG_BRONZE_SCALE)),
+        LOCATION(RC_HF_NEAR_KAK_TREE, logic->CanBonkTrees()),
+        LOCATION(RC_HF_SOUTH_TREE, logic->CanBonkTrees()),
+        LOCATION(RC_HF_NEAR_LLR_TREE, logic->CanBonkTrees()),
+        LOCATION(RC_HF_NEAR_LH_TREE, logic->CanBonkTrees()),
+        LOCATION(RC_HF_NEAR_GV_TREE, logic->IsChild && logic->CanBonkTrees()),
+        LOCATION(RC_HF_NEAR_ZR_TREE, logic->CanBonkTrees()),
+        LOCATION(RC_HF_NEAR_KAK_S_TREE, logic->CanBonkTrees()),
+        LOCATION(RC_HF_ADULT_NEAR_GV_TREE, logic->IsAdult && logic->CanBonkTrees()),
+        LOCATION(RC_HF_TREE_NEAR_HC_GROTTO_1, logic->IsChild && logic->CanBonkTrees()),
+        LOCATION(RC_HF_TREE_NEAR_HC_GROTTO_2, logic->IsChild && logic->CanBonkTrees()),
+        LOCATION(RC_HF_TREE_YELLOW_GROTTO_TREE, logic->IsChild && logic->CanBonkTrees()),
+        LOCATION(RC_HF_SOUTHEAST_TREE_1, logic->IsChild && logic->CanBonkTrees()),
+        LOCATION(RC_HF_NEAR_HC_GROTTO_TREE_3, logic->IsAdult && logic->CanBonkTrees()),
+        LOCATION(RC_HF_SOUTHEAST_TREE_2, logic->CanBonkTrees()), // Both
+        LOCATION(RC_HF_SOUTHEAST_TREE_3, logic->CanBonkTrees()), // Both
+        LOCATION(RC_HF_EAST_TREE_1, logic->CanBonkTrees()),      // Both
+        LOCATION(RC_HF_NORTHWEST_TREE_1, logic->CanBonkTrees()), // Both
+        LOCATION(RC_HF_SOUTHEAST_TREE_4, logic->CanBonkTrees()),// Both
+        LOCATION(RC_HF_NORTHWEST_TREE_2, logic->IsAdult && logic->CanBonkTrees()),
+        LOCATION(RC_HF_SOUTH_TREE_1, logic->CanBonkTrees()), // Both
         LOCATION(RC_HF_POND_STORMS_FAIRY,      logic->CanUse(RG_SONG_OF_STORMS)),
         LOCATION(RC_HF_CENTRAL_GRASS_1,        logic->CanCutShrubs()),
         LOCATION(RC_HF_CENTRAL_GRASS_2,        logic->CanCutShrubs()),

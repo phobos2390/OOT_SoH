@@ -3108,6 +3108,41 @@ std::map<RandomizerCheck, RandomizerInf> rcToRandomizerInf = {
         RC_SPIRIT_TEMPLE_MQ_BEAMOS_SMALL_CRATE,
         RAND_INF_SPIRIT_TEMPLE_MQ_BEAMOS_SMALL_CRATE,
     },
+
+    { RC_HF_NEAR_KAK_TREE,                                          RAND_INF_NEAR_KAK_TREE },
+    { RC_HF_SOUTH_TREE,                                             RAND_INF_SOUTH_HF_TREE },
+    { RC_HF_NEAR_LLR_TREE,                                          RAND_INF_NEAR_LLR_TREE },
+    { RC_HF_NEAR_LH_TREE,                                           RAND_INF_NEAR_LH_TREE },
+    { RC_HF_NEAR_GV_TREE,                                           RAND_INF_NEAR_GV_TREE },
+    { RC_HF_NEAR_ZR_TREE,                                           RAND_INF_NEAR_ZR_TREE },
+    { RC_HF_NEAR_KAK_S_TREE,                                        RAND_INF_NEAR_KAK_S_TREE },
+    { RC_MARKET_DAY_TREE,                                           RAND_INF_MARKET_DAY_TREE },
+    { RC_HC_NEAR_GUARDS_TREE_5,                                     RAND_INF_HC_NEAR_GUARDS_TREE_5 },
+    { RC_HC_NEAR_GUARDS_TREE_4,                                     RAND_INF_HC_NEAR_GUARDS_TREE_4 },
+    { RC_HC_NEAR_GUARDS_TREE_3,                                     RAND_INF_HC_NEAR_GUARDS_TREE_3 },
+    { RC_HC_NEAR_GUARDS_TREE_2,                                     RAND_INF_HC_NEAR_GUARDS_TREE_2 },
+    { RC_HC_NEAR_GUARDS_TREE_1,                                     RAND_INF_HC_NEAR_GUARDS_TREE_1 },
+    { RC_HF_EAST_TREE_1,                                            RAND_INF_HF_EAST_TREE_1 },
+    { RC_HF_SOUTH_TREE_1,                                           RAND_INF_HF_SOUTH_TREE_1 },
+    { RC_HF_NORTHWEST_TREE_2,                                       RAND_INF_HF_NORTHWEST_TREE_2 },
+    { RC_HF_SOUTHEAST_TREE_4,                                       RAND_INF_HF_SOUTHEAST_TREE_4 },
+    { RC_HF_NORTHWEST_TREE_1,                                       RAND_INF_HF_NORTHWEST_TREE_1 },
+    { RC_HF_EAST_TREE_1,                                            RAND_INF_HF_EAST_TREE_1 },
+    { RC_HF_SOUTHEAST_TREE_3,                                       RAND_INF_HF_SOUTHEAST_TREE_3 },
+    { RC_HF_SOUTHEAST_TREE_2,                                       RAND_INF_HF_SOUTHEAST_TREE_2 },
+    { RC_HF_NEAR_HC_GROTTO_TREE_3,                                  RAND_INF_HF_NEAR_HC_GROTTO_TREE_3 },
+    { RC_HF_SOUTHEAST_TREE_1,                                       RAND_INF_HF_SOUTHEAST_TREE_1 },
+    { RC_HF_TREE_YELLOW_GROTTO_TREE,                                RAND_INF_HF_TREE_YELLOW_GROTTO_TREE },
+    { RC_HF_TREE_NEAR_HC_GROTTO_2,                                  RAND_INF_HF_TREE_NEAR_HC_GROTTO_2 },
+    { RC_HF_TREE_NEAR_HC_GROTTO_1,                                  RAND_INF_HF_TREE_NEAR_HC_GROTTO_1 },
+    { RC_ZF_TREE,                                                   RAND_INF_ZF_TREE },
+    { RC_ZR_TREE,                                                   RAND_INF_ZR_TREE },
+    { RC_KAK_TREE,                                                  RAND_INF_KAK_TREE },
+    { RC_LLR_TREE,                                                  RAND_INF_LLR_TREE },
+    { RC_HF_ADULT_NEAR_GV_TREE,                                     RAND_INF_HF_ADULT_NEAR_GV_TREE },
+    { RC_HC_SKULLTULA_TREE,                                         RAND_INF_HC_SKULLTULA_TREE },
+    { RC_HC_NEAR_GUARDS_TREE,                                       RAND_INF_HC_NEAR_GUARDS_TREE },
+    { RC_HC_GROTTO_TREE,                                            RAND_INF_HC_GROTTO_TREE },
 };
 
 BeehiveIdentity Randomizer::IdentifyBeehive(s32 sceneNum, s16 xPosition, s32 respawnData) {
@@ -3389,6 +3424,29 @@ PotIdentity Randomizer::IdentifyPot(s32 sceneNum, s32 posX, s32 posZ) {
     }
 
     return potIdentity;
+}
+
+TreeIdentity Randomizer::IdentifyTree(s32 sceneNum, s32 posX, s32 posZ) {
+    struct TreeIdentity treeIdentity;
+    uint32_t treeSceneNum = sceneNum;
+
+    treeIdentity.randomizerInf = RAND_INF_MAX;
+    treeIdentity.randomizerCheck = RC_UNKNOWN_CHECK;
+
+    s32 actorParams = TWO_ACTOR_PARAMS(posX, posZ);
+
+    Rando::Location* location = GetCheckObjectFromActor(ACTOR_EN_WOOD02, treeSceneNum, actorParams);
+
+    if (location->GetRandomizerCheck() == RC_UNKNOWN_CHECK) {
+        LUSLOG_DEBUG("Tree fitting criteria at X: %d Z: %d", posX, posZ);
+        LUSLOG_WARN("IdentifyTree did not receive a valid RC value (%d).", location->GetRandomizerCheck());
+        assert(false);
+    } else {
+        treeIdentity.randomizerInf = rcToRandomizerInf[location->GetRandomizerCheck()];
+        treeIdentity.randomizerCheck = location->GetRandomizerCheck();
+    }
+
+    return treeIdentity;
 }
 
 FishIdentity Randomizer::IdentifyFish(s32 sceneNum, s32 actorParams) {

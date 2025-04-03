@@ -189,6 +189,8 @@ void Context::GenerateLocationPool() {
             (location.GetRCType() == RCTYPE_NLCRATE && (mOptions[RSK_SHUFFLE_CRATES].Is(RO_SHUFFLE_CRATES_OFF) ||
                                                         !mOptions[RSK_LOGIC_RULES].Is(RO_LOGIC_NO_LOGIC))) ||
             (location.GetRCType() == RCTYPE_SMALL_CRATE && mOptions[RSK_SHUFFLE_CRATES].Is(RO_SHUFFLE_CRATES_OFF)) ||
+
+            (location.GetRCType() == RCTYPE_TREE && mOptions[RSK_SHUFFLE_TREES].Is(RO_SHUFFLE_TREES_OFF)) ||
             (location.GetRCType() == RCTYPE_FAIRY && !mOptions[RSK_SHUFFLE_FAIRIES]) ||
             (location.GetRCType() == RCTYPE_FREESTANDING &&
              mOptions[RSK_SHUFFLE_FREESTANDING].Is(RO_SHUFFLE_FREESTANDING_OFF)) ||
@@ -238,6 +240,8 @@ void Context::GenerateLocationPool() {
             }
         }
     }
+
+    AddLocations(StaticData::GetAllDungeonLocations());
 }
 
 void Context::AddExcludedOptions() {

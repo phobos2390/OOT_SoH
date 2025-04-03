@@ -286,6 +286,15 @@ void Settings::CreateOptionDescriptions() {
         "Overworld - Only shuffle crates that are outside of dungeons.\n"
         "\n"
         "All Crates - Shuffle all crates.";
+    mOptionDescriptions[RSK_SHUFFLE_TREES] =
+        "Trees will contain randomized items which are dropped the first time the player rolls into one.\n"
+        "Trees will have a special appearance when carrying randomized items.\n"
+        "\nSome trees are dependant on Link's age, such as some trees in Hyrule Field.\n"
+        "\nSome trees will not be randomized due to being spawned from other trees, such as some of the ones near the bombable grotto in Hyrule Field.\n"
+        "\n"
+        "Off - Trees will not be shuffled.\n"
+        "\n"
+        "On - Shuffle some trees.";
     mOptionDescriptions[RSK_SHUFFLE_FISHING_POLE] = "Shuffles the fishing pole into the item pool.\n"
                                                     "\n"
                                                     "The fishing pole is required to play the fishing pond minigame.";

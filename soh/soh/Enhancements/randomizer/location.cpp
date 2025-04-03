@@ -548,6 +548,25 @@ Rando::Location Rando::Location::Crate(RandomizerCheck rc, RandomizerCheckQuest 
              false,  collectionCheck };
 }
 
+Rando::Location Rando::Location::Tree(RandomizerCheck rc, RandomizerCheckQuest quest_, RandomizerCheckArea area_,
+                                     SceneID scene_, int32_t actorParams_, std::string&& shortName_,
+                                     std::string&& spoilerName_, RandomizerHintTextKey hintKey,
+                                     RandomizerGet vanillaItem, SpoilerCollectionCheck collectionCheck) {
+    return { rc,
+             quest_,
+             RCTYPE_TREE,
+             area_,
+             ACTOR_EN_WOOD02,
+             scene_,
+             actorParams_,
+             std::move(shortName_),
+             std::move(spoilerName_),
+             hintKey,
+             vanillaItem,
+             false,
+             collectionCheck };
+}
+
 Rando::Location Rando::Location::NLCrate(RandomizerCheck rc, RandomizerCheckQuest quest_, RandomizerCheckArea area_,
                                          SceneID scene_, int32_t actorParams_, std::string&& shortName_,
                                          RandomizerHintTextKey hintKey, RandomizerGet vanillaItem,

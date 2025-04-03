@@ -53,6 +53,7 @@ class Randomizer {
     ShopItemIdentity IdentifyShopItem(s32 sceneNum, u8 slotIndex);
     CowIdentity IdentifyCow(s32 sceneNum, s32 posX, s32 posZ);
     PotIdentity IdentifyPot(s32 sceneNum, s32 posX, s32 posZ);
+    TreeIdentity IdentifyTree(s32 sceneNum, s32 posX, s32 posZ);
     FishIdentity IdentifyFish(s32 sceneNum, s32 actorParams);
     GrassIdentity IdentifyGrass(s32 sceneNum, s32 posX, s32 posZ, s32 respawnData, s32 linkAge);
     CrateIdentity IdentifyCrate(s32 sceneNum, s32 posX, s32 posZ);
