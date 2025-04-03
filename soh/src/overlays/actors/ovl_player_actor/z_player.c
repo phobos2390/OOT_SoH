@@ -408,6 +408,8 @@ void Player_SetPendingFlag(Player* this, PlayState* play) {
 }
 #pragma endregion
 
+void func_80838940(Player* this, LinkAnimationHeader* anim, f32 arg2, PlayState* play, u16 sfxId);
+
 // .bss part 1
 static s32 D_80858AA0;
 static s32 sSavedCurrentMask;
@@ -2518,6 +2520,10 @@ void Player_ProcessItemButtons(Player* this, PlayState* play) {
     s32 item;
     s32 i;
 
+    if (this->actor.bgCheckFlags & 1) {
+        this->rocUseCount = 0;
+    }
+
     if (this->currentMask != PLAYER_MASK_NONE && !CVarGetInteger(CVAR_ENHANCEMENT("PersistentMasks"), 0)) {
         maskItemAction = this->currentMask - 1 + PLAYER_IA_MASK_KEATON;
 
@@ -2572,6 +2578,29 @@ void Player_ProcessItemButtons(Player* this, PlayState* play) {
         } else if (GameInteractor_Should(VB_CHANGE_HELD_ITEM_AND_USE_ITEM, true, item)) {
             this->heldItemButton = i;
             Player_UseItem(play, this, item);
+        } else if (item != ITEM_NAYRUS_LOVE || !CVarGetInteger("gRocsFeather", 0)) {
+            this->heldItemButton = i;
+            func_80835F44(play, this, item);
+        } else if (this->rocUseCount == 0) {
+            this->rocUseCount++;
+            this->linearVelocity = 5.0f;
+            this->actor.velocity.y = 8.0f;
+            this->actor.world.rot.y = this->currentYaw = this->actor.shape.rot.y;
+
+            func_80838940(this, D_80853D4C[2][0], !(2 & 1) ? 5.8f : 3.5f, play, /* NA_SE_VO_LI_SWORD_N*/ 0);
+
+            Vec3f effectsPos = this->actor.home.pos;
+            effectsPos.y += 3;
+            f32 effectsScale = 1;
+            if (!gSaveContext.linkAge) {
+                effectsScale = 1.5f;
+            }
+            EffectSsGRipple_Spawn(play, &effectsPos, 200 * effectsScale, 300 * effectsScale, 1);
+            EffectSsGSplash_Spawn(play, &effectsPos, NULL, NULL, 0, 150 * effectsScale);
+
+            this->stateFlags2 &= ~(PLAYER_STATE2_HOPPING);
+
+            Player_PlaySfx(&this->actor, NA_SE_PL_SKIP);
         }
     }
 }

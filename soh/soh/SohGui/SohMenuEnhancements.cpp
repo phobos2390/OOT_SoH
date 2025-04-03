@@ -600,6 +600,13 @@ void SohMenu::AddMenuEnhancements() {
         .Options(CheckboxOptions().Tooltip(
             "Equip items and equipment on the D-pad. If used with \"D-pad on Pause Screen\", you must "
             "hold C-Up to equip instead of navigate."));
+   AddWidget(path, "Turn Nayru's Love into Roc's Feather", WIDGET_CVAR_CHECKBOX)
+        .CVar("CVAR_ENHANCEMENT(RocsFeather)")
+        .Options(CheckboxOptions().Tooltip(
+                    "Nayru's Love acts like Roc's Feather from the Indigo romhack instead. Grants a jump that can even "
+                    "be used in the air, "
+                    "but needs to recharge by touching the ground afterwards. Does not require magic to use."
+        ));
     AddWidget(path, "Assignable Tunics and Boots", WIDGET_CVAR_CHECKBOX)
         .CVar(CVAR_ENHANCEMENT("AssignableTunicsAndBoots"))
         .Options(CheckboxOptions().Tooltip("Allows equipping the Tunics and Boots to C-Buttons/D-pad."));
