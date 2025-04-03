@@ -4,7 +4,7 @@
 
 extern "C" {
 #include "variables.h"
-#include "overlays/actors/ovl_en_Wood02/z_en_wood02.h"
+#include "overlays/actors/ovl_En_Wood02/z_en_wood02.h"
 #include "static_data.h"
 extern PlayState* gPlayState;
 extern void EnWood02_Draw(Actor* thisx, PlayState* play);

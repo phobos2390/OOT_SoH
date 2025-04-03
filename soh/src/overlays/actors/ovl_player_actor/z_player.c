@@ -2580,12 +2580,12 @@ void Player_ProcessItemButtons(Player* this, PlayState* play) {
             Player_UseItem(play, this, item);
         } else if (item != ITEM_NAYRUS_LOVE || !CVarGetInteger("gRocsFeather", 0)) {
             this->heldItemButton = i;
-            func_80835F44(play, this, item);
+            Player_UseItem(play, this, item);
         } else if (this->rocUseCount == 0) {
             this->rocUseCount++;
             this->linearVelocity = 5.0f;
             this->actor.velocity.y = 8.0f;
-            this->actor.world.rot.y = this->currentYaw = this->actor.shape.rot.y;
+            this->actor.world.rot.y = this->yaw = this->actor.shape.rot.y;
 
             func_80838940(this, D_80853D4C[2][0], !(2 & 1) ? 5.8f : 3.5f, play, /* NA_SE_VO_LI_SWORD_N*/ 0);
 

@@ -1649,12 +1649,10 @@ void SohInputEditorWindow::DrawLinkTab() {
                                     .ShowButtons(true));
                 Ship::GuiWindow::EndGroupPanel(0);
                 Ship::GuiWindow::BeginGroupPanel("Sensitivity Modifier", ImGui::GetContentRegionAvail());
-                UIWidgets::PaddedEnhancementSliderFloat("Sensitivity Modifier 1: %.0f %%", "##SensitivityMod1",
-                                                        CVAR_SETTING("WalkModifier.SensitivityMapping1"), 0.0f, 1.0f, "", 1.0f,
-                                                        true, true, false, true);
-                UIWidgets::PaddedEnhancementSliderFloat("Sensitivity Modifier 2: %.0f %%", "##SensitivityMod2",
-                                                        CVAR_SETTING("WalkModifier.SensitivityMapping2"), 0.0f, 1.0f, "", 1.0f,
-                                                        true, true, false, true);
+                CVarSliderFloat("Sensitivity Modifier 1: %.0f %%", CVAR_SETTING("WalkModifier.SensitivityMapping1"),
+                    FloatSliderOptions().Color(THEME_COLOR).IsPercentage().Min(0.0f).Max(5.0f).DefaultValue(1.0f).ShowButtons(true));
+                CVarSliderFloat("Sensitivity Modifier 2: %.0f %%", CVAR_SETTING("WalkModifier.SensitivityMapping2"),
+                    FloatSliderOptions().Color(THEME_COLOR).IsPercentage().Min(0.0f).Max(5.0f).DefaultValue(1.0f).ShowButtons(true));
 
                 Ship::GuiWindow::EndGroupPanel(0);
                 Ship::GuiWindow::EndGroupPanel(0);

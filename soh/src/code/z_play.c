@@ -22,9 +22,6 @@
 #include <time.h>
 #include <assert.h>
 
-void* D_8012D1F0 = NULL;
-//UNK_TYPE D_8012D1F4 = 0; // unused
-Input* D_8012D1F8 = NULL;
 static Macro macro;
 
 TransitionUnk sTrnsnUnk;

@@ -122,13 +122,11 @@ inline void from_json(const json& j, SohStats& sohStats) {
 
 inline void to_json(json& j, const ShipRandomizerSaveContextData& shipRandomizerSaveContextData) {
     j = json{
-        {"adultTradeItems", shipRandomizerSaveContextData.adultTradeItems},
         {"triforcePiecesCollected", shipRandomizerSaveContextData.triforcePiecesCollected},
     };
 }
 
 inline void from_json(const json& j, ShipRandomizerSaveContextData& shipRandomizerSaveContextData) {
-    j.at("adultTradeItems").get_to(shipRandomizerSaveContextData.adultTradeItems);
     j.at("triforcePiecesCollected").get_to(shipRandomizerSaveContextData.triforcePiecesCollected);
 }
 
