@@ -48,7 +48,6 @@ void RegionTable_Init_DeathMountainTrail() {
         LOCATION(RC_DMT_BRONZE_BOULDER_9,         logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)),
         LOCATION(RC_DMT_BRONZE_BOULDER_10,        logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)),
         LOCATION(RC_DMT_BRONZE_BOULDER_11,        logic->IsAdult && logic->CanUse(RG_MEGATON_HAMMER)),
->>>>>>> 2b17f20665b7a8a1296a0d475863180188ad2818
     }, {
         //Exits
         Entrance(RR_KAK_BEHIND_GATE,          []{return true;}),

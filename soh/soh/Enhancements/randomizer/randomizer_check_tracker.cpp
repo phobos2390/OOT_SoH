@@ -1456,7 +1456,6 @@ void LoadSettings() {
                 showDungeonBoulders = false;
                 break;
         }
->>>>>>> 2b17f20665b7a8a1296a0d475863180188ad2818
     } else { // Vanilla
         showOverworldTokens = true;
         showDungeonTokens = true;

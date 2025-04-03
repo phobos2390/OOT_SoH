@@ -38,7 +38,6 @@ void RegionTable_Init_DesertColossus() {
         LOCATION(RC_COLOSSUS_CIRCLE_2_ROCK_6,        true),
         LOCATION(RC_COLOSSUS_CIRCLE_2_ROCK_7,        true),
         LOCATION(RC_COLOSSUS_CIRCLE_2_ROCK_8,        true),
->>>>>>> 2b17f20665b7a8a1296a0d475863180188ad2818
         LOCATION(RC_COLOSSUS_GOSSIP_STONE,           true),
     }, {
         //Exits
