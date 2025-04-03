@@ -2476,7 +2476,7 @@ void CosmeticsEditorWindow::DrawElement() {
 
     if (ImGui::BeginMenu("Customize Rainbows")) {
         UIWidgets::CVarCheckbox("Enable", CVAR("lEnableCustomRainbows"), UIWidgets::CheckboxOptions()
-                                .Color(THEME_COLOR)
+                                .Color(THEME_COLOR));
         if (CVarGetInteger(CVAR("lEnableCustomRainbows"), 0)) {
             ImGui::ColorEdit3("Color 1", (float*)&customColorZero,      ImGuiColorEditFlags_NoInputs);
             ImGui::ColorEdit3("Color 2", (float*)&customColorOne,       ImGuiColorEditFlags_NoInputs);
