@@ -17,5 +17,6 @@ void MoveMidoInKokiriForest_Register();
 void SkipChildRutoInteractions_Register();
 void FasterHeavyBlockLift_Register();
 void FasterRupeeAccumulator_Register();
+void FasterShadowShip_Register();
 
 #endif // TIME_SAVERS_H
