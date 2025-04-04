@@ -249,7 +249,6 @@ void Context::GenerateLocationPool() {
         }
     }
 
-    AddLocations(StaticData::GetAllDungeonLocations());
 }
 
 void Context::AddExcludedOptions() {
