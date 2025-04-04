@@ -34,6 +34,9 @@
 #include "soh/Enhancements/debugger/MessageViewer.h"
 #include "soh/Notification/Notification.h"
 #include "soh/Enhancements/TimeDisplay/TimeDisplay.h"
+#ifdef ENABLE_REMOTE_CONTROL
+#include "soh/Network/Anchor/Anchor.h"
+#endif
 
 namespace SohGui {
 
@@ -98,6 +101,9 @@ std::shared_ptr<RandomizerSettingsWindow> mRandomizerSettingsWindow;
 std::shared_ptr<SohModalWindow> mModalWindow;
 std::shared_ptr<Notification::Window> mNotificationWindow;
 std::shared_ptr<TimeDisplayWindow> mTimeDisplayWindow;
+#ifdef ENABLE_REMOTE_CONTROL    
+std::shared_ptr<AnchorRoomWindow> mAnchorRoomWindow;
+#endif
 
 UIWidgets::Colors GetMenuThemeColor() {
     return mSohMenu->GetMenuThemeColor();
@@ -203,6 +209,10 @@ void SetupGuiElements() {
     mNotificationWindow->Show();
     mTimeDisplayWindow = std::make_shared<TimeDisplayWindow>(CVAR_WINDOW("TimeDisplayEnabled"), "Additional Timers");
     gui->AddGuiWindow(mTimeDisplayWindow);
+#ifdef ENABLE_REMOTE_CONTROL
+        mAnchorRoomWindow = std::make_shared<AnchorRoomWindow>(CVAR_WINDOW("AnchorRoom"), "Anchor Room");
+        gui->AddGuiWindow(mAnchorRoomWindow);
+#endif
 }
 
 void Destroy() {
@@ -238,6 +248,9 @@ void Destroy() {
     mTimeSplitWindow = nullptr;
     mPlandomizerWindow = nullptr;
     mTimeDisplayWindow = nullptr;
+#ifdef ENABLE_REMOTE_CONTROL
+    mAnchorRoomWindow = nullptr;
+#endif
 }
 
 void RegisterPopup(std::string title, std::string message, std::string button1, std::string button2,
