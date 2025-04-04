@@ -38,7 +38,8 @@ enum class EntranceType {
 
 class Entrance {
   public:
-    Entrance(RandomizerRegion connectedRegion_, ConditionFn condition_function_, bool force_logic = false, bool spreadsAreasWithPriority_ = true);
+    Entrance(RandomizerRegion connectedRegion_, ConditionFn condition_function_, bool force_logic = false,
+             bool spreadsAreasWithPriority_ = true);
     void SetCondition(ConditionFn newCondition);
     bool GetConditionsMet() const;
     std::string to_string() const;

@@ -10,8 +10,10 @@
 namespace Rando {
 EntranceLinkInfo NO_RETURN_ENTRANCE = { EntranceType::None, RR_NONE, RR_NONE, -1 };
 
-Entrance::Entrance(RandomizerRegion connectedRegion_, ConditionFn condition_function_, bool force_logic_, bool spreadsAreasWithPriority_)
-    : connectedRegion(connectedRegion_), condition_function(condition_function_), force_logic(force_logic_), spreadsAreasWithPriority(spreadsAreasWithPriority_){
+Entrance::Entrance(RandomizerRegion connectedRegion_, ConditionFn condition_function_, bool force_logic_,
+                   bool spreadsAreasWithPriority_)
+    : connectedRegion(connectedRegion_), condition_function(condition_function_), force_logic(force_logic_),
+      spreadsAreasWithPriority(spreadsAreasWithPriority_) {
     originalConnectedRegion = connectedRegion_;
 }
 
