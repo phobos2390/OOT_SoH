@@ -822,7 +822,12 @@ std::vector<SeqType> allTypes = {
 
 void AudioEditor_RandomizeAll() {
     for (auto type : allTypes) {
-        RandomizeGroup(type);
+        if (type != SEQ_OCARINA) {
+            RandomizeGroup(type);
+        } else {
+            std::vector<SeqType> types = {SEQ_OCARINA, SEQ_FANFARE};
+            RandomizeGroupMulti(types);
+        }
     }
 
     Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
