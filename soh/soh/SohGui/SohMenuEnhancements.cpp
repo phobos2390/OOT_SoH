@@ -432,7 +432,7 @@ void SohMenu::AddMenuEnhancements() {
 
     AddWidget(path, "Mods", WIDGET_SEPARATOR_TEXT);
     AddWidget(path, "Use Alternate Assets", WIDGET_CVAR_CHECKBOX)
-        .CVar(CVAR_ENHANCEMENT("AltAssets"))
+        .CVar(CVAR_SETTING("AltAssets"))
         .Options(CheckboxOptions().Tooltip(
             "Toggle between standard assets and alternate assets. Usually mods will indicate if "
             "this setting has to be used or not."));
@@ -565,7 +565,7 @@ void SohMenu::AddMenuEnhancements() {
     AddWidget(path, "Kokiri Draw Distance", WIDGET_CVAR_CHECKBOX)
         .CVar(CVAR_ENHANCEMENT("DisableKokiriDrawDistance"))
         .PreFunc(
-            [](WidgetInfo& info) { info.isHidden = CVarGetInteger(CVAR_ENHANCEMENT("DisableDrawDistance"), 1) > 1; })
+            [](WidgetInfo& info) { info.isHidden = CVarGetInteger(CVAR_ENHANCEMENT("DisableDrawDistance"), 1) <= 1; })
         .Options(CheckboxOptions().Tooltip(
             "The Kokiri are mystical beings that fade into view when approached. Enabling this will remove their "
             "draw distance."));
@@ -755,7 +755,7 @@ void SohMenu::AddMenuEnhancements() {
         })
         .Options(CheckboxOptions().Tooltip(
             "Allows Light Arrows to activate Sun Switches. May require a room reload if toggled during gameplay."));
-    AddWidget(path, "Bow and Child/Slingshot as Adult", WIDGET_CVAR_CHECKBOX)
+    AddWidget(path, "Bow as Child/Slingshot as Adult", WIDGET_CVAR_CHECKBOX)
         .CVar(CVAR_ENHANCEMENT("BowSlingshotAmmoFix"))
         .Options(CheckboxOptions().Tooltip("Allows Child Link to use a Bow with Arrows.\n"
                                            "Allows Adult Link to use a Slingshot with Seeds.\n\n"
@@ -787,9 +787,8 @@ void SohMenu::AddMenuEnhancements() {
         .Options(CheckboxOptions().Tooltip(
             "Change aiming for the Boomerang from Third-Person to First-Person to see past Link's head."));
     AddWidget(path, "Aiming Reticle for Boomerang", WIDGET_CVAR_CHECKBOX)
-        .CVar(CVAR_ENHANCEMENT("BoomerangFirstPerson"))
-        .PreFunc(
-            [](WidgetInfo& info) { info.isHidden = CVarGetInteger(CVAR_ENHANCEMENT("BoomerangFirstPerson"), 0) != 0; })
+        .CVar(CVAR_ENHANCEMENT("BoomerangReticle"))
+        .PreFunc([](WidgetInfo& info) { info.isHidden = !CVarGetInteger(CVAR_ENHANCEMENT("BoomerangFirstPerson"), 0); })
         .Options(CheckboxOptions().Tooltip("Aiming with the Boomerang will display a reticle as with the Hookshot."));
 
     AddWidget(path, "Magic Spells", WIDGET_SEPARATOR_TEXT);
@@ -1108,7 +1107,7 @@ void SohMenu::AddMenuEnhancements() {
         .CVar(CVAR_ENHANCEMENT("DeleteFileOnDeath"))
         .Options(CheckboxOptions().Tooltip("Dying will delete your file.\n\n" ICON_FA_EXCLAMATION_TRIANGLE
                                            " WARNING " ICON_FA_EXCLAMATION_TRIANGLE
-                                           "\nTHIS IS NOT REVERSABLE!\nUSE AT YOUR OWN RISK!"));
+                                           "\nTHIS IS NOT REVERSIBLE!\nUSE AT YOUR OWN RISK!"));
     AddWidget(path, "Always Win Goron Pot", WIDGET_CVAR_CHECKBOX)
         .CVar(CVAR_ENHANCEMENT("GoronPot"))
         .Options(CheckboxOptions().Tooltip("Always get the Heart Piece/Purple Rupee from the Spinning Goron Pot."));
