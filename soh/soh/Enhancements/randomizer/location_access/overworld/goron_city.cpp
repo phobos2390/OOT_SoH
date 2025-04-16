@@ -69,7 +69,6 @@ void RegionTable_Init_GoronCity() {
         LOCATION(RC_GC_MAZE_SILVER_BOULDER_27,      logic->CanUse(RG_SILVER_GAUNTLETS)),
         LOCATION(RC_GC_MAZE_SILVER_BOULDER_28,      logic->CanUse(RG_SILVER_GAUNTLETS)),
         LOCATION(RC_GC_MAZE_SILVER_BOULDER_29,      logic->CanUse(RG_SILVER_GAUNTLETS)),
-        LOCATION(RC_GC_MAZE_SILVER_BOULDER_30,      logic->CanUse(RG_SILVER_GAUNTLETS)),
         LOCATION(RC_GC_MAZE_BOULDER_1,              logic->BlastOrSmash()),
         LOCATION(RC_GC_MAZE_BOULDER_2,              logic->BlastOrSmash()),
         LOCATION(RC_GC_MAZE_BOULDER_3,              logic->BlastOrSmash()),
