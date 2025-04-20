@@ -211,7 +211,7 @@ void ObjHamishi_RandomizerKill(void* actorRef) {
 }
 
 void RegisterShuffleRock() {
-    bool shouldRegister = IS_RANDO && (RAND_GET_OPTION(RSK_SHUFFLE_ROCKS) || RAND_GET_OPTION(RSK_SHUFFLE_ROCKS));
+    bool shouldRegister = IS_RANDO && (RAND_GET_OPTION(RSK_SHUFFLE_ROCKS) || RAND_GET_OPTION(RSK_SHUFFLE_BOULDERS));
 
     COND_ID_HOOK(OnActorInit, ACTOR_EN_ISHI, shouldRegister, EnIshi_RandomizerInit);
     COND_ID_HOOK(OnActorInit, ACTOR_OBJ_BOMBIWA, shouldRegister, ObjBombiwa_RandomizerInit);
