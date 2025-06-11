@@ -7,27 +7,23 @@ void RegionTable_Init_ZorasFountain() {
     // clang-format off
     areaTable[RR_ZORAS_FOUNTAIN] = Region("Zoras Fountain", "Zoras Fountain", {RA_ZORAS_FOUNTAIN}, NO_DAY_NIGHT_CYCLE, {
         //Events
-        EventAccess(&logic->GossipStoneFairy, []{return logic->CallGossipFairyExceptSuns();}, true),
-        EventAccess(&logic->ButterflyFairy,   []{return logic->ButterflyFairy || (logic->CanUse(RG_STICKS) && logic->AtDay);}, true),
+        EventAccess(&logic->GossipStoneFairy, []{return logic->CallGossipFairyExceptSuns();}),
+        EventAccess(&logic->ButterflyFairy,   []{return logic->CanUse(RG_STICKS) && logic->AtDay;}),
     }, {
         //Locations
-        LOCATION(RC_ZF_GS_TREE,                       logic->IsChild && logic->CanBonkTrees()),
-        LOCATION(RC_ZF_GS_ABOVE_THE_LOG,              logic->IsChild && logic->HookshotOrBoomerang() && logic->CanGetNightTimeGS()),
-        LOCATION(RC_ZF_GS_HIDDEN_CAVE,                logic->CanUse(RG_SILVER_GAUNTLETS) && logic->BlastOrSmash() && logic->HookshotOrBoomerang() && logic->IsAdult && logic->CanGetNightTimeGS()),
+        LOCATION(RC_ZF_GS_TREE,                      logic->IsChild && logic->CanBonkTrees()),
+        LOCATION(RC_ZF_GS_ABOVE_THE_LOG,             logic->IsChild && logic->HookshotOrBoomerang() && logic->CanGetNightTimeGS()),
         LOCATION_NNL(RC_ZF_FAIRY_GOSSIP_STONE_FAIRY,     logic->CallGossipFairyExceptSuns()),
         LOCATION_NNL(RC_ZF_FAIRY_GOSSIP_STONE_FAIRY_BIG, logic->CanUse(RG_SONG_OF_STORMS)),
         LOCATION_NNL(RC_ZF_JABU_GOSSIP_STONE_FAIRY,      logic->CallGossipFairyExceptSuns()),
         LOCATION_NNL(RC_ZF_JABU_GOSSIP_STONE_FAIRY_BIG,  logic->CanUse(RG_SONG_OF_STORMS)),
-        LOCATION(RC_ZF_FAIRY_GOSSIP_STONE,            true),
-        LOCATION(RC_ZF_JABU_GOSSIP_STONE,             true),
-        LOCATION_NNL(RC_ZF_NEAR_JABU_POT_1,               logic->IsChild && logic->CanBreakPots()),
-        LOCATION_NNL(RC_ZF_NEAR_JABU_POT_2,               logic->IsChild && logic->CanBreakPots()),
-        LOCATION_NNL(RC_ZF_NEAR_JABU_POT_3,               logic->IsChild && logic->CanBreakPots()),
-        LOCATION_NNL(RC_ZF_NEAR_JABU_POT_4,               logic->IsChild && logic->CanBreakPots()),
-        LOCATION_NNL(RC_ZF_TREE,                          logic->IsChild && logic->CanBonkTrees()),
-        LOCATION(RC_ZF_BOULDER,                       logic->BlastOrSmash()),
-        LOCATION(RC_ZF_SILVER_BOULDER,                logic->CanUse(RG_SILVER_GAUNTLETS)),
-        LOCATION(RC_ZF_UNDERGROUND_BOULDER,           logic->CanUse(RG_SILVER_GAUNTLETS) && logic->BlastOrSmash()),
+        LOCATION(RC_ZF_FAIRY_GOSSIP_STONE,           true),
+        LOCATION(RC_ZF_JABU_GOSSIP_STONE,            true),
+        LOCATION_NNL(RC_ZF_NEAR_JABU_POT_1,              logic->IsChild && logic->CanBreakPots()),
+        LOCATION_NNL(RC_ZF_NEAR_JABU_POT_2,              logic->IsChild && logic->CanBreakPots()),
+        LOCATION_NNL(RC_ZF_NEAR_JABU_POT_3,              logic->IsChild && logic->CanBreakPots()),
+        LOCATION_NNL(RC_ZF_NEAR_JABU_POT_4,              logic->IsChild && logic->CanBreakPots()),
+        LOCATION_NNL(RC_ZF_TREE,                         logic->IsChild && logic->CanBonkTrees()),
     }, {
         //Exits
         Entrance(RR_ZD_BEHIND_KING_ZORA,       []{return true;}),

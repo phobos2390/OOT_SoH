@@ -159,11 +159,6 @@ static void ValidateOtherEntrance(GetAccessibleLocationsStruct& gals) {
             ApplyStartingInventory(); // RANDOTODO when proper ammo logic is done, this could be moved to the start
         }
     }
-    // If we are not shuffling the guard house, add the key so we can properly check for poe merchant access
-    if (gals.validatedStartingRegion && gals.foundTempleOfTime &&
-        ctx->GetOption(RSK_SHUFFLE_INTERIOR_ENTRANCES).Is(RO_INTERIOR_ENTRANCE_SHUFFLE_OFF)) {
-        Rando::StaticData::RetrieveItem(RG_GUARD_HOUSE_KEY).ApplyEffect();
-    }
 }
 
 // Apply all items that are necessary for checking all location access
@@ -180,10 +175,7 @@ static void ApplyAllAdvancmentItems() {
 static void ValidateSphereZero(GetAccessibleLocationsStruct& gals) {
     auto ctx = Rando::Context::GetInstance();
     // Condition for verifying everything required for sphere 0, expanding search to all locations
-    if ((!logic->AreCheckingBigPoes || logic->CanEmptyBigPoes) && gals.validatedStartingRegion &&
-        gals.foundTempleOfTime && gals.haveTimeAccess) {
-        // stop checking for big poes
-        logic->AreCheckingBigPoes = false;
+    if (gals.validatedStartingRegion && gals.foundTempleOfTime && gals.haveTimeAccess) {
         // Apply all items that are necessary for checking all location access
         ApplyAllAdvancmentItems();
         // Reset access as the non-starting age
@@ -213,22 +205,22 @@ void ProcessExits(Region* region, GetAccessibleLocationsStruct& gals, Randomizer
         // Update Time of Day Access for the exit
         if (UpdateToDAccess(&exit, exitRegion)) {
             gals.logicUpdated = true;
-            if (!gals.sphereZeroComplete || logic->AreCheckingBigPoes) {
+            if (!gals.sphereZeroComplete) {
                 if (!gals.foundTempleOfTime || !gals.validatedStartingRegion) {
                     ValidateOtherEntrance(gals);
                 }
                 ValidateSphereZero(gals);
             }
+            // If the exit is accessible and hasn't been added yet, add it to the pool
+            // RANDOTODO do we want to add the region after the loop now, considering we
+            // are processing the new region immediately. Maybe a reverse for loop in ProcessRegion?
+            if (!exitRegion->addedToPool) {
+                exitRegion->addedToPool = true;
+                gals.regionPool.push_back(exit.GetConnectedRegionKey());
+            }
+
             // process the region we just expanded to, to reduce looping
             ProcessRegion(exitRegion, gals, ignore, stopOnBeatable, addToPlaythrough);
-        }
-
-        // If the exit is accessible and hasn't been added yet, add it to the pool
-        // RANDOTODO do we want to add the region after the loop now, considering we
-        // are processing the new region immediately. Maybe a reverse for loop in ProcessRegion?
-        if (!exitRegion->addedToPool && exit.ConditionsMet()) {
-            exitRegion->addedToPool = true;
-            gals.regionPool.push_back(exit.GetConnectedRegionKey());
         }
 
         if (addToPlaythrough) {
@@ -328,11 +320,11 @@ bool IsBeatableWithout(RandomizerCheck excludedCheck, bool replaceItem,
     RandomizerGet copy = ctx->GetItemLocation(excludedCheck)->GetPlacedRandomizerGet(); // Copy out item
     ctx->GetItemLocation(excludedCheck)->SetPlacedItem(RG_NONE);                        // Write in empty item
     logic->Reset();
-  bool result = CheckBeatable(ignore);
+    bool result = CheckBeatable(ignore);
     if (replaceItem) {
         ctx->GetItemLocation(excludedCheck)->SetPlacedItem(copy); // Immediately put item back
     }
-  return result;
+    return result;
 }
 
 // Reset non-Logic-class logic, and optionally apply the initial inventory
@@ -580,7 +572,7 @@ void GeneratePlaythrough() {
 // return if the seed is currently beatable or not
 bool CheckBeatable(RandomizerGet ignore /* = RG_NONE*/) {
     auto ctx = Rando::Context::GetInstance();
-  ctx->playthroughBeatable = false;
+    ctx->playthroughBeatable = false;
     GetAccessibleLocationsStruct gals(0);
     ResetLogic(ctx, gals, true);
     do {
@@ -596,15 +588,12 @@ bool CheckBeatable(RandomizerGet ignore /* = RG_NONE*/) {
 }
 
 // Check if the currently randomised set of entrances is a valid game map.
-void ValidateEntrances(bool checkPoeCollectorAccess, bool checkOtherEntranceAccess) {
+void ValidateEntrances(bool checkOtherEntranceAccess) {
     auto ctx = Rando::Context::GetInstance();
     GetAccessibleLocationsStruct gals(0);
     ResetLogic(ctx, gals, !checkOtherEntranceAccess);
 
     ctx->allLocationsReachable = false;
-    if (checkPoeCollectorAccess) {
-        logic->AreCheckingBigPoes = true;
-    }
 
     if (checkOtherEntranceAccess) {
         gals.foundTempleOfTime = false;
@@ -619,13 +608,6 @@ void ValidateEntrances(bool checkPoeCollectorAccess, bool checkOtherEntranceAcce
         RegionTable(RR_ROOT)->childNight = true;
         RegionTable(RR_ROOT)->adultNight = true;
         RegionTable(RR_ROOT)->childDay = true;
-        RegionTable(RR_ROOT)->adultDay = true;
-    } else if (checkPoeCollectorAccess) {
-        // If we are not shuffling the guard house, add the key so we can properly check for poe merchant access
-        if (ctx->GetOption(RSK_SHUFFLE_INTERIOR_ENTRANCES).Is(RO_INTERIOR_ENTRANCE_SHUFFLE_OFF)) {
-            Rando::StaticData::RetrieveItem(RG_GUARD_HOUSE_KEY).ApplyEffect();
-        }
-        RegionTable(RR_ROOT)->adultNight = true;
         RegionTable(RR_ROOT)->adultDay = true;
     } else {
         ApplyAllAdvancmentItems();
@@ -712,11 +694,11 @@ static void PareDownPlaythrough() {
     auto ctx = Rando::Context::GetInstance();
     std::vector<RandomizerCheck> toAddBackItem;
     // Start at sphere before Ganon's and count down
-    for (int i = ctx->playthroughLocations.size() - 2; i >= 0; i--) {
+    for (int32_t i = static_cast<int32_t>(ctx->playthroughLocations.size()) - 2; i >= 0; i--) {
         // Check each item location in sphere
         std::vector<int> erasableIndices;
         std::vector<RandomizerCheck> sphere = ctx->playthroughLocations.at(i);
-        for (int j = sphere.size() - 1; j >= 0; j--) {
+        for (int32_t j = static_cast<int32_t>(sphere.size()) - 1; j >= 0; j--) {
             RandomizerCheck loc = sphere.at(j);
             RandomizerGet locGet = ctx->GetItemLocation(loc)->GetPlacedRandomizerGet(); // Copy out item
 

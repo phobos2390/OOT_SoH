@@ -23,11 +23,11 @@ void RegionTable_Init_Market() {
         LOCATION(RC_MARKET_GRASS_6,              logic->IsChild && (logic->CanUseSword() || logic->HasItem(RG_GORONS_BRACELET))),
         LOCATION(RC_MARKET_GRASS_7,              logic->IsChild && (logic->CanUseSword() || logic->HasItem(RG_GORONS_BRACELET))),
         LOCATION(RC_MARKET_GRASS_8,              logic->IsChild && (logic->CanUseSword() || logic->HasItem(RG_GORONS_BRACELET))),
-        LOCATION(RC_MK_NEAR_BAZAAR_CRATE_1,      logic->IsChild && logic->CanBreakCrates()),
-        LOCATION(RC_MK_NEAR_BAZAAR_CRATE_2,      logic->IsChild && logic->CanBreakCrates()),
-        LOCATION(RC_MK_SHOOTING_GALLERY_CRATE_1, logic->IsChild && logic->CanBreakCrates()),
-        LOCATION(RC_MK_SHOOTING_GALLERY_CRATE_2, logic->IsChild && logic->CanBreakCrates()),
-        LOCATION(RC_MARKET_DAY_TREE, logic->IsChild && logic->CanBonkTrees() && logic->AtDay),
+        LOCATION(RC_MK_NEAR_BAZAAR_CRATE_1,      logic->IsChild /*&& logic->CanRoll()*/),
+        LOCATION(RC_MK_NEAR_BAZAAR_CRATE_2,      logic->IsChild /*&& logic->CanRoll()*/),
+        LOCATION(RC_MK_SHOOTING_GALLERY_CRATE_1, logic->IsChild /*&& logic->CanRoll()*/),
+        LOCATION(RC_MK_SHOOTING_GALLERY_CRATE_2, logic->IsChild /*&& logic->CanRoll()*/),
+        LOCATION(RC_MARKET_DAY_TREE,             logic->IsChild && logic->CanBonkTrees() && logic->AtDay),
     }, {
         //Exits
         Entrance(RR_MARKET_ENTRANCE,            []{return true;}),
@@ -139,8 +139,8 @@ void RegionTable_Init_Market() {
 
     areaTable[RR_MARKET_MASK_SHOP] = Region("Market Mask Shop", "Market Mask Shop", {}, NO_DAY_NIGHT_CYCLE, {
         //Events
-        EventAccess(&logic->SkullMask,   []{return logic->SkullMask   || (logic->HasItem(RG_ZELDAS_LETTER) && (ctx->GetOption(RSK_COMPLETE_MASK_QUEST) || ChildCanAccess(RR_KAKARIKO_VILLAGE)));}, true), //RANDOTODO Complete mask quest does not need this location, so should be tied to link's pocket
-        EventAccess(&logic->MaskOfTruth, []{return logic->MaskOfTruth || (logic->SkullMask && (ctx->GetOption(RSK_COMPLETE_MASK_QUEST) || (ChildCanAccess(RR_THE_LOST_WOODS) && logic->CanUse(RG_SARIAS_SONG) && RegionTable(RR_THE_GRAVEYARD)->childDay && ChildCanAccess(RR_HYRULE_FIELD) && logic->StoneCount() == 3)));}, true),
+        EventAccess(&logic->SkullMask,   []{return logic->HasItem(RG_ZELDAS_LETTER) && (ctx->GetOption(RSK_COMPLETE_MASK_QUEST) || ChildCanAccess(RR_KAKARIKO_VILLAGE));}), //RANDOTODO Complete mask quest does not need this location, so should be tied to link's pocket
+        EventAccess(&logic->MaskOfTruth, []{return logic->SkullMask && (ctx->GetOption(RSK_COMPLETE_MASK_QUEST) || (ChildCanAccess(RR_THE_LOST_WOODS) && logic->CanUse(RG_SARIAS_SONG) && RegionTable(RR_THE_GRAVEYARD)->childDay && ChildCanAccess(RR_HYRULE_FIELD) && logic->StoneCount() == 3));}, true),
     }, {
         //Locations
         LOCATION(RC_MASK_SHOP_HINT, true),

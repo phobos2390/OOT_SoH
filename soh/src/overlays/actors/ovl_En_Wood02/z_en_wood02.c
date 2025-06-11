@@ -358,27 +358,24 @@ void EnWood02_Update(Actor* thisx, PlayState* play2) {
             dropsSpawnPt = this->actor.world.pos;
             dropsSpawnPt.y += 200.0f;
 
-            if ((this->unk_14C >= 0) && (this->unk_14C < 0x64)) {
-                if (CVarGetInteger(CVAR_ENHANCEMENT("TreesDropSticks"), 0) && INV_CONTENT(ITEM_STICK) != ITEM_NONE) {
-                    if (GameInteractor_Should(VB_TREE_DROP_ITEM, true, this)) {}
-                    numDrops = Rand_ZeroOne() * 4;
-                    for (i = 0; i < numDrops; ++i) {
-                        Item_DropCollectible(play, &dropsSpawnPt, ITEM00_STICK);
+            if (GameInteractor_Should(VB_TREE_DROP_ITEM, true, this)) {
+                if ((this->unk_14C >= 0) && (this->unk_14C < 0x64)) {
+                    if (CVarGetInteger(CVAR_ENHANCEMENT("TreesDropSticks"), 0) &&
+                        INV_CONTENT(ITEM_STICK) != ITEM_NONE) {
+                        numDrops = Rand_ZeroOne() * 4;
+                        for (i = 0; i < numDrops; ++i) {
+                            Item_DropCollectible(play, &dropsSpawnPt, ITEM00_STICK);
+                        }
+                    } else {
+                        Item_DropCollectibleRandom(play, &this->actor, &dropsSpawnPt, this->unk_14C << 4);
                     }
-                } else {
-                    if (GameInteractor_Should(VB_TREE_DROP_ITEM, (this->unk_14C >= 0) && (this->unk_14C < 0x64), this)) {
-                    Item_DropCollectibleRandom(play, &this->actor, &dropsSpawnPt, this->unk_14C << 4);
+                } else if (this->actor.home.rot.z != 0) {
+                    this->actor.home.rot.z &= 0x1FFF;
+                    this->actor.home.rot.z |= 0xE000;
+                    Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, dropsSpawnPt.x, dropsSpawnPt.y, dropsSpawnPt.z, 0,
+                                this->actor.world.rot.y, 0, this->actor.home.rot.z, true);
+                    this->actor.home.rot.z = 0;
                 }
-                }
-            } else if (this->actor.home.rot.z != 0) {
-                this->actor.home.rot.z &= 0x1FFF;
-                this->actor.home.rot.z |= 0xE000;
-                if (GameInteractor_Should(VB_TREE_DROP_ITEM, true, this)) {
-                    Item_DropCollectibleRandom(play, &this->actor, &dropsSpawnPt, this->unk_14C << 4);
-                }
-                Actor_Spawn(&play->actorCtx, play, ACTOR_EN_SW, dropsSpawnPt.x, dropsSpawnPt.y, dropsSpawnPt.z, 0,
-                            this->actor.world.rot.y, 0, this->actor.home.rot.z, true);
-                this->actor.home.rot.z = 0;
             }
 
             // Spawn falling leaves
@@ -470,13 +467,13 @@ void EnWood02_Draw(Actor* thisx, PlayState* play) {
     }
 
     Gfx_SetupDL_25Xlu(gfxCtx);
-    if (GameInteractor_Should(VB_TREE_SETUP_DRAW, (this->actor.params == WOOD_LEAF_GREEN) || (this->actor.params == WOOD_LEAF_YELLOW), this)) {
+    if (GameInteractor_Should(VB_TREE_SETUP_DRAW,
+                              (this->actor.params == WOOD_LEAF_GREEN) || (this->actor.params == WOOD_LEAF_YELLOW),
+                              this)) {
         Gfx_SetupDL_25Opa(gfxCtx);
         gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, red, green, blue, 127);
         Gfx_DrawDListOpa(play, object_wood02_DL_000700);
-    }
-    else if (GameInteractor_Should(VB_TREE_SETUP_DRAW, D_80B3BF70[this->drawType & 0xF] != NULL, this)) {
-            Gfx_SetupDL_25Opa(gfxCtx);
+    } else if (GameInteractor_Should(VB_TREE_SETUP_DRAW, D_80B3BF70[this->drawType & 0xF] != NULL, this)) {
         Gfx_DrawDListOpa(play, D_80B3BF54[this->drawType & 0xF]);
         gDPSetEnvColor(POLY_XLU_DISP++, red, green, blue, 0);
         gSPMatrix(POLY_XLU_DISP++, MATRIX_NEWMTX(gfxCtx), G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

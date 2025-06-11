@@ -6,7 +6,7 @@
 #include "BinaryWriter.h"
 
 namespace SOH {
-class ResourceFactoryBinaryAudioSequenceV2 : public Ship::ResourceFactoryBinary {
+class ResourceFactoryBinaryAudioSequenceV2 final : public Ship::ResourceFactoryBinary {
   public:
     std::shared_ptr<Ship::IResource> ReadResource(std::shared_ptr<Ship::File> file, std::shared_ptr<Ship::ResourceInitData> initData) override;
 };

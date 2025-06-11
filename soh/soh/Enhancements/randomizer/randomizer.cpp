@@ -26,6 +26,7 @@
 #include <tuple>
 #include <functional>
 #include "draw.h"
+#include "soh/OTRGlobals.h"
 #include "soh/SohGui/UIWidgets.hpp"
 #include "static_data.h"
 #include "soh/Enhancements/game-interactor/GameInteractor.h"
@@ -65,7 +66,7 @@ const std::string Randomizer::NaviRandoMessageTableID = "RandomizerNavi";
 const std::string Randomizer::IceTrapRandoMessageTableID = "RandomizerIceTrap";
 const std::string Randomizer::randoMiscHintsTableID = "RandomizerMiscHints";
 
-static const char* englishRupeeNames[190] = {
+static const char* englishRupeeNames[188] = {
     "[P]",
     "Bad RNG Rolls",
     "Baht",
@@ -111,8 +112,6 @@ static const char* englishRupeeNames[190] = {
     "Dimes",
     "Dinars",
     "DNA",
-    "Doge",
-    "Dogecoin",
     "Doll Hairs",
     "Dollars",
     "Dollarydoos",
@@ -258,25 +257,25 @@ static const char* englishRupeeNames[190] = {
     "Zorkmids",
 };
 
-static const char* germanRupeeNames[80] = {
-    "Baht",       "Bananen",    "Bitcoin",   "Bonbons",       "Bratwürste", "Brause UFOs", "Brötchen", "Cent",
-    "Diamanten",  "Dinar",      "Diridari",  "Dogecoin",      "Dollar",     "Draken",      "ECU",      "Elexit",
-    "Erz",        "Erzbrocken", "Euro",      "EXP",           "Forint",     "Franken",     "Freunde",  "Gil",
-    "Gold",       "Groschen",   "Gulden",    "Gummibären",    "Heller",     "Juwelen",     "Karolin",  "Kartoffeln",
-    "Kies",       "Knete",      "Knochen",   "Kohle",         "Kraniche",   "Kreuzer",     "Kronen",   "Kronkorken",
-    "Kröten",     "Lira",       "Mark",      "Mäuse",         "Monde",      "Moorhühner",  "Moos",     "Münzen",
-    "Naira",      "Penunze",    "Pesa",      "Pfandflaschen", "Pfennig",    "Pfund",       "Pilze",    "Plastiks",
-    "Pokédollar", "Radieschen", "Rand",      "Rappen",        "Real",       "Rial",        "Riyal",    "Rubine",
-    "Rupien",     "Saphire",    "Schilling", "Seelen",        "Septime",    "Smaragde",    "Steine",   "Sterne",
-    "Sternis",    "Tael",       "Taler",     "Wagenchips",    "Won",        "Yen",         "Yuan",     "Zenny",
+static const char* germanRupeeNames[79] = {
+    "Baht",       "Bananen",   "Bitcoin",       "Bonbons",  "Bratwürste", "Brause UFOs", "Brötchen",   "Cent",
+    "Diamanten",  "Dinar",     "Diridari",      "Dollar",   "Draken",     "ECU",         "Elexit",     "Erz",
+    "Erzbrocken", "Euro",      "EXP",           "Forint",   "Franken",    "Freunde",     "Gil",        "Gold",
+    "Groschen",   "Gulden",    "Gummibären",    "Heller",   "Juwelen",    "Karolin",     "Kartoffeln", "Kies",
+    "Knete",      "Knochen",   "Kohle",         "Kraniche", "Kreuzer",    "Kronen",      "Kronkorken", "Kröten",
+    "Lira",       "Mark",      "Mäuse",         "Monde",    "Moorhühner", "Moos",        "Münzen",     "Naira",
+    "Penunze",    "Pesa",      "Pfandflaschen", "Pfennig",  "Pfund",      "Pilze",       "Plastiks",   "Pokédollar",
+    "Radieschen", "Rand",      "Rappen",        "Real",     "Rial",       "Riyal",       "Rubine",     "Rupien",
+    "Saphire",    "Schilling", "Seelen",        "Septime",  "Smaragde",   "Steine",      "Sterne",     "Sternis",
+    "Tael",       "Taler",     "Wagenchips",    "Won",      "Yen",        "Yuan",        "Zenny",
 };
 
-static const char* frenchRupeeNames[40] = {
-    "Anneaux",   "Baguettes",   "Balles",     "Bananes",     "Bitcoin",    "Blés",     "Bling",    "Capsules",
-    "Centimes",  "Champignons", "Clochettes", "Crédits",     "Croissants", "Diamants", "Dogecoin", "Dollars",
-    "Émeraudes", "Éthers",      "Étoiles",    "Euros",       "Florens",    "Francs",   "Galds",    "Gils",
-    "Grouses",   "Halos",       "Joyaux",     "Lunes",       "Mailles",    "Munnies",  "Orbes",    "Orens",
-    "Pépètes",   "Pièces",      "Plastyks",   "Pokédollars", "Pokémon",    "Radis",    "Rubis",    "Zennies",
+static const char* frenchRupeeNames[39] = {
+    "Anneaux",  "Baguettes",   "Balles",      "Bananes", "Bitcoin",    "Blés",     "Bling",   "Capsules",
+    "Centimes", "Champignons", "Clochettes",  "Crédits", "Croissants", "Diamants", "Dollars", "Émeraudes",
+    "Éthers",   "Étoiles",     "Euros",       "Florens", "Francs",     "Galds",    "Gils",    "Grouses",
+    "Halos",    "Joyaux",      "Lunes",       "Mailles", "Munnies",    "Orbes",    "Orens",   "Pépètes",
+    "Pièces",   "Plastyks",    "Pokédollars", "Pokémon", "Radis",      "Rubis",    "Zennies",
 };
 
 Randomizer::Randomizer() {
@@ -357,9 +356,12 @@ std::unordered_map<s16, s16> getItemIdToItemId = {
     { GI_CLAIM_CHECK, ITEM_CLAIM_CHECK },
 };
 
+#ifdef _MSC_VER
 #pragma optimize("", off)
+#else
 #pragma GCC push_options
 #pragma GCC optimize("O0")
+#endif
 bool Randomizer::SpoilerFileExists(const char* spoilerFileName) {
     if (strcmp(spoilerFileName, "") != 0) {
         std::ifstream spoilerFileStream(SohUtils::Sanitize(spoilerFileName));
@@ -372,8 +374,11 @@ bool Randomizer::SpoilerFileExists(const char* spoilerFileName) {
 
     return false;
 }
-#pragma GCC pop_options
+#ifdef _MSC_VER
 #pragma optimize("", on)
+#else
+#pragma GCC pop_options
+#endif
 
 void Randomizer::LoadHintMessages() {
     auto ctx = Rando::Context::GetInstance();
@@ -3131,41 +3136,67 @@ std::map<RandomizerCheck, RandomizerInf> rcToRandomizerInf = {
         RC_SPIRIT_TEMPLE_MQ_BEAMOS_SMALL_CRATE,
         RAND_INF_SPIRIT_TEMPLE_MQ_BEAMOS_SMALL_CRATE,
     },
-
-    { RC_HF_NEAR_KAK_TREE,                                          RAND_INF_NEAR_KAK_TREE },
-    { RC_HF_SOUTH_TREE,                                             RAND_INF_SOUTH_HF_TREE },
-    { RC_HF_NEAR_LLR_TREE,                                          RAND_INF_NEAR_LLR_TREE },
-    { RC_HF_NEAR_LH_TREE,                                           RAND_INF_NEAR_LH_TREE },
-    { RC_HF_NEAR_GV_TREE,                                           RAND_INF_NEAR_GV_TREE },
-    { RC_HF_NEAR_ZR_TREE,                                           RAND_INF_NEAR_ZR_TREE },
-    { RC_HF_NEAR_KAK_S_TREE,                                        RAND_INF_NEAR_KAK_S_TREE },
-    { RC_MARKET_DAY_TREE,                                           RAND_INF_MARKET_DAY_TREE },
-    { RC_HC_NEAR_GUARDS_TREE_5,                                     RAND_INF_HC_NEAR_GUARDS_TREE_5 },
-    { RC_HC_NEAR_GUARDS_TREE_4,                                     RAND_INF_HC_NEAR_GUARDS_TREE_4 },
-    { RC_HC_NEAR_GUARDS_TREE_3,                                     RAND_INF_HC_NEAR_GUARDS_TREE_3 },
-    { RC_HC_NEAR_GUARDS_TREE_2,                                     RAND_INF_HC_NEAR_GUARDS_TREE_2 },
-    { RC_HC_NEAR_GUARDS_TREE_1,                                     RAND_INF_HC_NEAR_GUARDS_TREE_1 },
-    { RC_HF_EAST_TREE_1,                                            RAND_INF_HF_EAST_TREE_1 },
-    { RC_HF_SOUTH_TREE_1,                                           RAND_INF_HF_SOUTH_TREE_1 },
-    { RC_HF_NORTHWEST_TREE_2,                                       RAND_INF_HF_NORTHWEST_TREE_2 },
-    { RC_HF_SOUTHEAST_TREE_4,                                       RAND_INF_HF_SOUTHEAST_TREE_4 },
-    { RC_HF_NORTHWEST_TREE_1,                                       RAND_INF_HF_NORTHWEST_TREE_1 },
-    { RC_HF_EAST_TREE_1,                                            RAND_INF_HF_EAST_TREE_1 },
-    { RC_HF_SOUTHEAST_TREE_3,                                       RAND_INF_HF_SOUTHEAST_TREE_3 },
-    { RC_HF_SOUTHEAST_TREE_2,                                       RAND_INF_HF_SOUTHEAST_TREE_2 },
-    { RC_HF_NEAR_HC_GROTTO_TREE_3,                                  RAND_INF_HF_NEAR_HC_GROTTO_TREE_3 },
-    { RC_HF_SOUTHEAST_TREE_1,                                       RAND_INF_HF_SOUTHEAST_TREE_1 },
-    { RC_HF_TREE_YELLOW_GROTTO_TREE,                                RAND_INF_HF_TREE_YELLOW_GROTTO_TREE },
-    { RC_HF_TREE_NEAR_HC_GROTTO_2,                                  RAND_INF_HF_TREE_NEAR_HC_GROTTO_2 },
-    { RC_HF_TREE_NEAR_HC_GROTTO_1,                                  RAND_INF_HF_TREE_NEAR_HC_GROTTO_1 },
-    { RC_ZF_TREE,                                                   RAND_INF_ZF_TREE },
-    { RC_ZR_TREE,                                                   RAND_INF_ZR_TREE },
-    { RC_KAK_TREE,                                                  RAND_INF_KAK_TREE },
-    { RC_LLR_TREE,                                                  RAND_INF_LLR_TREE },
-    { RC_HF_ADULT_NEAR_GV_TREE,                                     RAND_INF_HF_ADULT_NEAR_GV_TREE },
-    { RC_HC_SKULLTULA_TREE,                                         RAND_INF_HC_SKULLTULA_TREE },
-    { RC_HC_NEAR_GUARDS_TREE,                                       RAND_INF_HC_NEAR_GUARDS_TREE },
-    { RC_HC_GROTTO_TREE,                                            RAND_INF_HC_GROTTO_TREE },
+    { RC_MARKET_DAY_TREE, RAND_INF_MARKET_DAY_TREE },
+    { RC_HC_NEAR_GUARDS_TREE_1, RAND_INF_HC_NEAR_GUARDS_TREE_1 },
+    { RC_HC_NEAR_GUARDS_TREE_2, RAND_INF_HC_NEAR_GUARDS_TREE_2 },
+    { RC_HC_NEAR_GUARDS_TREE_3, RAND_INF_HC_NEAR_GUARDS_TREE_3 },
+    { RC_HC_NEAR_GUARDS_TREE_4, RAND_INF_HC_NEAR_GUARDS_TREE_4 },
+    { RC_HC_NEAR_GUARDS_TREE_5, RAND_INF_HC_NEAR_GUARDS_TREE_5 },
+    { RC_HC_NEAR_GUARDS_TREE_6, RAND_INF_HC_NEAR_GUARDS_TREE_6 },
+    { RC_HC_SKULLTULA_TREE, RAND_INF_HC_SKULLTULA_TREE },
+    { RC_HC_GROTTO_TREE, RAND_INF_HC_GROTTO_TREE },
+    { RC_HF_NEAR_KAK_TREE, RAND_INF_HF_NEAR_KAK_TREE },
+    { RC_HF_NEAR_KAK_SMALL_TREE, RAND_INF_HF_NEAR_KAK_SMALL_TREE },
+    { RC_HF_TREE_NEAR_HC_GROTTO_1, RAND_INF_HF_TREE_NEAR_HC_GROTTO_1 },
+    { RC_HF_TREE_NEAR_HC_GROTTO_2, RAND_INF_HF_TREE_NEAR_HC_GROTTO_2 },
+    { RC_HF_TREE_NEAR_HC_GROTTO_3, RAND_INF_HF_TREE_NEAR_HC_GROTTO_3 },
+    { RC_HF_NEAR_LLR_TREE, RAND_INF_HF_NEAR_LLR_TREE },
+    { RC_HF_NEAR_LH_TREE, RAND_INF_HF_NEAR_LH_TREE },
+    { RC_HF_CHILD_NEAR_GV_TREE, RAND_INF_HF_CHILD_NEAR_GV_TREE },
+    { RC_HF_ADULT_NEAR_GV_TREE, RAND_INF_HF_ADULT_NEAR_GV_TREE },
+    { RC_HF_NEAR_ZR_TREE, RAND_INF_HF_NEAR_ZR_TREE },
+    { RC_HF_NORTHWEST_TREE_1, RAND_INF_HF_NORTHWEST_TREE_1 },
+    { RC_HF_NORTHWEST_TREE_2, RAND_INF_HF_NORTHWEST_TREE_2 },
+    { RC_HF_NORTHWEST_TREE_3, RAND_INF_HF_NORTHWEST_TREE_3 },
+    { RC_HF_NORTHWEST_TREE_4, RAND_INF_HF_NORTHWEST_TREE_4 },
+    { RC_HF_NORTHWEST_TREE_5, RAND_INF_HF_NORTHWEST_TREE_5 },
+    { RC_HF_NORTHWEST_TREE_6, RAND_INF_HF_NORTHWEST_TREE_6 },
+    { RC_HF_EAST_TREE_1, RAND_INF_HF_EAST_TREE_1 },
+    { RC_HF_EAST_TREE_2, RAND_INF_HF_EAST_TREE_2 },
+    { RC_HF_EAST_TREE_3, RAND_INF_HF_EAST_TREE_3 },
+    { RC_HF_EAST_TREE_4, RAND_INF_HF_EAST_TREE_4 },
+    { RC_HF_EAST_TREE_5, RAND_INF_HF_EAST_TREE_5 },
+    { RC_HF_EAST_TREE_6, RAND_INF_HF_EAST_TREE_6 },
+    { RC_HF_SOUTHEAST_TREE_1, RAND_INF_HF_SOUTHEAST_TREE_1 },
+    { RC_HF_SOUTHEAST_TREE_2, RAND_INF_HF_SOUTHEAST_TREE_2 },
+    { RC_HF_SOUTHEAST_TREE_3, RAND_INF_HF_SOUTHEAST_TREE_3 },
+    { RC_HF_SOUTHEAST_TREE_4, RAND_INF_HF_SOUTHEAST_TREE_4 },
+    { RC_HF_SOUTHEAST_TREE_5, RAND_INF_HF_SOUTHEAST_TREE_5 },
+    { RC_HF_SOUTHEAST_TREE_6, RAND_INF_HF_SOUTHEAST_TREE_6 },
+    { RC_HF_SOUTHEAST_TREE_7, RAND_INF_HF_SOUTHEAST_TREE_7 },
+    { RC_HF_SOUTHEAST_TREE_8, RAND_INF_HF_SOUTHEAST_TREE_8 },
+    { RC_HF_SOUTHEAST_TREE_9, RAND_INF_HF_SOUTHEAST_TREE_9 },
+    { RC_HF_SOUTHEAST_TREE_10, RAND_INF_HF_SOUTHEAST_TREE_10 },
+    { RC_HF_SOUTHEAST_TREE_11, RAND_INF_HF_SOUTHEAST_TREE_11 },
+    { RC_HF_SOUTHEAST_TREE_12, RAND_INF_HF_SOUTHEAST_TREE_12 },
+    { RC_HF_SOUTHEAST_TREE_13, RAND_INF_HF_SOUTHEAST_TREE_13 },
+    { RC_HF_SOUTHEAST_TREE_14, RAND_INF_HF_SOUTHEAST_TREE_14 },
+    { RC_HF_SOUTHEAST_TREE_15, RAND_INF_HF_SOUTHEAST_TREE_15 },
+    { RC_HF_SOUTHEAST_TREE_16, RAND_INF_HF_SOUTHEAST_TREE_16 },
+    { RC_HF_SOUTHEAST_TREE_17, RAND_INF_HF_SOUTHEAST_TREE_17 },
+    { RC_HF_SOUTHEAST_TREE_18, RAND_INF_HF_SOUTHEAST_TREE_18 },
+    { RC_HF_SOUTHEAST_TREE_19, RAND_INF_HF_SOUTHEAST_TREE_19 },
+    { RC_HF_CHILD_SOUTHEAST_TREE_1, RAND_INF_HF_CHILD_SOUTHEAST_TREE_1 },
+    { RC_HF_CHILD_SOUTHEAST_TREE_2, RAND_INF_HF_CHILD_SOUTHEAST_TREE_2 },
+    { RC_HF_CHILD_SOUTHEAST_TREE_3, RAND_INF_HF_CHILD_SOUTHEAST_TREE_3 },
+    { RC_HF_CHILD_SOUTHEAST_TREE_4, RAND_INF_HF_CHILD_SOUTHEAST_TREE_4 },
+    { RC_HF_CHILD_SOUTHEAST_TREE_5, RAND_INF_HF_CHILD_SOUTHEAST_TREE_5 },
+    { RC_HF_CHILD_SOUTHEAST_TREE_6, RAND_INF_HF_CHILD_SOUTHEAST_TREE_6 },
+    { RC_HF_TEKTITE_GROTTO_TREE, RAND_INF_HF_TEKTITE_GROTTO_TREE },
+    { RC_ZF_TREE, RAND_INF_ZF_TREE },
+    { RC_ZR_TREE, RAND_INF_ZR_TREE },
+    { RC_KAK_TREE, RAND_INF_KAK_TREE },
+    { RC_LLR_TREE, RAND_INF_LLR_TREE },
     { RC_KF_CIRCLE_ROCK_1, RAND_INF_KF_CIRCLE_ROCK_1 },
     { RC_KF_CIRCLE_ROCK_2, RAND_INF_KF_CIRCLE_ROCK_2 },
     { RC_KF_CIRCLE_ROCK_3, RAND_INF_KF_CIRCLE_ROCK_3 },
@@ -3728,29 +3759,6 @@ PotIdentity Randomizer::IdentifyPot(s32 sceneNum, s32 posX, s32 posZ) {
     return potIdentity;
 }
 
-TreeIdentity Randomizer::IdentifyTree(s32 sceneNum, s32 posX, s32 posZ) {
-    struct TreeIdentity treeIdentity;
-    uint32_t treeSceneNum = sceneNum;
-
-    treeIdentity.randomizerInf = RAND_INF_MAX;
-    treeIdentity.randomizerCheck = RC_UNKNOWN_CHECK;
-
-    s32 actorParams = TWO_ACTOR_PARAMS(posX, posZ);
-
-    Rando::Location* location = GetCheckObjectFromActor(ACTOR_EN_WOOD02, treeSceneNum, actorParams);
-
-    if (location->GetRandomizerCheck() == RC_UNKNOWN_CHECK) {
-        LUSLOG_DEBUG("Tree fitting criteria at X: %d Z: %d", posX, posZ);
-        LUSLOG_WARN("IdentifyTree did not receive a valid RC value (%d).", location->GetRandomizerCheck());
-        assert(false);
-    } else {
-        treeIdentity.randomizerInf = rcToRandomizerInf[location->GetRandomizerCheck()];
-        treeIdentity.randomizerCheck = location->GetRandomizerCheck();
-    }
-
-    return treeIdentity;
-}
-
 FishIdentity Randomizer::IdentifyFish(s32 sceneNum, s32 actorParams) {
     struct FishIdentity fishIdentity;
 
@@ -3843,9 +3851,9 @@ CrateIdentity Randomizer::IdentifyCrate(s32 sceneNum, s32 posX, s32 posZ) {
         crateSceneNum = SCENE_MARKET_DAY;
     } else if (sceneNum == SCENE_GERUDOS_FORTRESS && gPlayState->linkAgeOnLoad == 1 && posX == 310) {
         if (posZ == -1830) {
-            posZ = -1842.0f;
+            posZ = -1842;
         } else if (posZ == -1770) {
-            posZ = -1782.0f;
+            posZ = -1782;
         }
     }
 
@@ -3903,6 +3911,26 @@ RockIdentity Randomizer::IdentifyRock(s32 sceneNum, s32 posX, s32 posZ) {
     }
 
     return rockIdentity;
+}
+
+TreeIdentity Randomizer::IdentifyTree(s32 sceneNum, s32 posX, s32 posZ) {
+    struct TreeIdentity treeIdentity;
+
+    for (int x = -1; x <= 1; x++) {
+        for (int z = -1; z <= 1; z++) {
+            s32 actorParams = TWO_ACTOR_PARAMS(posX + x, posZ + z);
+            Rando::Location* location = GetCheckObjectFromActor(ACTOR_EN_WOOD02, sceneNum, actorParams);
+            if (location->GetRandomizerCheck() != RC_UNKNOWN_CHECK) {
+                treeIdentity.randomizerInf = rcToRandomizerInf[location->GetRandomizerCheck()];
+                treeIdentity.randomizerCheck = location->GetRandomizerCheck();
+                return treeIdentity;
+            }
+        }
+    }
+
+    treeIdentity.randomizerInf = RAND_INF_MAX;
+    treeIdentity.randomizerCheck = RC_UNKNOWN_CHECK;
+    return treeIdentity;
 }
 
 u8 Randomizer::GetRandoSettingValue(RandomizerSettingKey randoSettingKey) {
@@ -3992,14 +4020,8 @@ bool GenerateRandomizer(std::string seed /*= ""*/) {
     return false;
 }
 
-static const std::unordered_map<int32_t, const char*> randomizerPresetList = {
-    { RANDOMIZER_PRESET_DEFAULT, "Default" },
-    { RANDOMIZER_PRESET_BEGINNER, "Beginner" },
-    { RANDOMIZER_PRESET_STANDARD, "Standard" },
-    { RANDOMIZER_PRESET_ADVANCED, "Advanced" },
-    { RANDOMIZER_PRESET_HELL_MODE, "Hell Mode" }
-};
-static int32_t randomizerPresetSelected = RANDOMIZER_PRESET_DEFAULT;
+static bool locationsTabOpen = false;
+static bool tricksTabOpen = false;
 
 void RandomizerSettingsWindow::DrawElement() {
     auto ctx = Rando::Context::GetInstance();
@@ -4007,53 +4029,12 @@ void RandomizerSettingsWindow::DrawElement() {
         generated = 0;
         randoThread.join();
     }
-    static bool locationsTabOpen = false;
-    static bool tricksTabOpen = false;
-    bool disableEditingRandoSettings =
-        CVarGetInteger(CVAR_GENERAL("RandoGenerating"), 0) || CVarGetInteger(CVAR_GENERAL("OnFileSelectNameEntry"), 0);
-    ImGui::BeginDisabled(CVarGetInteger(CVAR_SETTING("DisableChanges"), 0) || disableEditingRandoSettings);
-    const PresetTypeDefinition presetTypeDef = presetTypes.at(PRESET_TYPE_RANDOMIZER);
-    std::string comboboxTooltip = "";
-    for (auto iter = presetTypeDef.presets.begin(); iter != presetTypeDef.presets.end(); ++iter) {
-        if (iter->first != 0)
-            comboboxTooltip += "\n\n";
-        comboboxTooltip += std::string(iter->second.label) + " - " + std::string(iter->second.description);
-    }
-    const std::string presetTypeCvar = CVAR_GENERAL("SelectedPresets.") + std::to_string(PRESET_TYPE_RANDOMIZER);
-    randomizerPresetSelected = CVarGetInteger(presetTypeCvar.c_str(), RANDOMIZER_PRESET_DEFAULT);
+    bool generating = CVarGetInteger(CVAR_GENERAL("RandoGenerating"), 0);
+    bool disableEditingRandoSettings = generating || CVarGetInteger(CVAR_GENERAL("OnFileSelectNameEntry"), 0);
 
-    if (UIWidgets::Combobox("Randomizer Presets", &randomizerPresetSelected, randomizerPresetList,
-                            UIWidgets::ComboboxOptions()
-                                .DefaultIndex(RANDOMIZER_PRESET_DEFAULT)
-                                .Tooltip(comboboxTooltip.c_str())
-                                .Color(THEME_COLOR))) {
-        CVarSetInteger(presetTypeCvar.c_str(), randomizerPresetSelected);
-    }
-    ImGui::SameLine();
-    ImGui::SetCursorPosY(ImGui::GetCursorPos().y + 35.f);
-    if (UIWidgets::Button(
-            "Apply Preset##Randomizer",
-            UIWidgets::ButtonOptions().Color(THEME_COLOR).Size(UIWidgets::Sizes::Inline).Padding(ImVec2(10.f, 6.f)))) {
-        if (randomizerPresetSelected >= presetTypeDef.presets.size()) {
-            randomizerPresetSelected = 0;
-        }
-        const PresetDefinition selectedPresetDef = presetTypeDef.presets.at(randomizerPresetSelected);
-        for (const char* block : presetTypeDef.blocksToClear) {
-            CVarClearBlock(block);
-        }
-        if (randomizerPresetSelected != 0) {
-            applyPreset(selectedPresetDef.entries);
-        }
-        CVarSetInteger(presetTypeCvar.c_str(), randomizerPresetSelected);
-        Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
-        mSettings->UpdateOptionProperties();
-        // force excluded location list and trick list update if tab is open.
-        locationsTabOpen = false;
-        tricksTabOpen = false;
-    }
-    ImGui::EndDisabled();
+    DrawPresetSelector({ PRESET_SECTION_RANDOMIZER }, "Randomizer", generating);
 
-    UIWidgets::Spacer(0);
+    // UIWidgets::Spacer(0);
     UIWidgets::CVarCheckbox("Manual seed entry", CVAR_RANDOMIZER_SETTING("ManualSeedEntry"),
                             UIWidgets::CheckboxOptions().Color(THEME_COLOR));
     if (CVarGetInteger(CVAR_RANDOMIZER_SETTING("ManualSeedEntry"), 0)) {
@@ -4087,23 +4068,21 @@ void RandomizerSettingsWindow::DrawElement() {
     }
 
     UIWidgets::Spacer(0);
-    ImGui::BeginDisabled((gSaveContext.gameMode != GAMEMODE_FILE_SELECT) || GameInteractor::IsSaveLoaded());
-    if (UIWidgets::Button("Generate Randomizer",
-                          UIWidgets::ButtonOptions().Size(ImVec2(250.f, 0.f)).Color(THEME_COLOR))) {
+    UIWidgets::ButtonOptions options = UIWidgets::ButtonOptions().Size(ImVec2(250.f, 0.f)).Color(THEME_COLOR);
+    options.Disabled((gSaveContext.gameMode != GAMEMODE_FILE_SELECT) || GameInteractor::IsSaveLoaded());
+    if (options.disabled) {
+        options.DisabledTooltip("Must be on File Select to generate a randomizer seed.");
+    }
+    if (UIWidgets::Button("Generate Randomizer", options)) {
         ctx->SetSpoilerLoaded(false);
         GenerateRandomizer(CVarGetInteger(CVAR_RANDOMIZER_SETTING("ManualSeedEntry"), 0) ? seedString : "");
     }
-    ImGui::EndDisabled();
 
     ImGui::SameLine();
     if (!CVarGetInteger(CVAR_RANDOMIZER_SETTING("DontGenerateSpoiler"), 0)) {
         std::string spoilerfilepath = CVarGetString(CVAR_GENERAL("SpoilerLog"), "");
         ImGui::Text("Spoiler File: %s", spoilerfilepath.c_str());
     }
-
-    // RANDOTODO settings presets
-    // std::string presetfilepath = CVarGetString(CVAR_RANDOMIZER_SETTING("LoadedPreset"), "");
-    // ImGui::Text("Settings File: %s", presetfilepath.c_str());
 
     UIWidgets::Separator(true, true, 0.f, 0.f);
 
@@ -4455,7 +4434,7 @@ void RandomizerSettingsWindow::DrawElement() {
                     Ship::Context::GetInstance()->GetWindow()->GetGui()->SaveConsoleVariablesNextFrame();
                 }
             }
-            if (ImGui::BeginTable("trickTags", showTag.size(),
+            if (ImGui::BeginTable("trickTags", static_cast<int>(showTag.size()),
                                   ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings |
                                       ImGuiTableFlags_Borders)) {
                 for (auto [rtTag, isShown] : showTag) {
@@ -4716,9 +4695,17 @@ void RandomizerSettingsWindow::DrawElement() {
     UIWidgets::PopStyleTabs();
 }
 
+void RandomizerSettingsWindow::SetNeedsUpdate() {
+    mNeedsUpdate = true;
+}
+
 void RandomizerSettingsWindow::UpdateElement() {
     if (mNeedsUpdate) {
+        RandomizerCheckObjects::UpdateImGuiVisibility();
         mSettings->UpdateOptionProperties();
+        locationsTabOpen = false;
+        tricksTabOpen = false;
+        mNeedsUpdate = false;
     }
 }
 
@@ -4877,6 +4864,9 @@ CustomMessage Randomizer::GetMapGetItemMessageWithHint(GetItemEntry itemEntry) {
     } else {
         messageEntry.Replace("[[typeHint]]", Rando::StaticData::hintTextTable[RHT_DUNGEON_ORDINARY].GetHintMessage());
     }
+
+    // BUG: the icon is not in the message yet so are not accounted for, so overflows are possible
+    messageEntry.AutoFormat();
 
     return messageEntry;
 }
@@ -5927,7 +5917,7 @@ void RandomizerSettingsWindow::InitElement() {
 // (special cases for rando items)
 void Randomizer_GameplayStats_SetTimestamp(uint16_t item) {
 
-    u32 time = GAMEPLAYSTAT_TOTAL_TIME;
+    u32 time = static_cast<u32>(GAMEPLAYSTAT_TOTAL_TIME);
 
     // Have items in Link's pocket shown as being obtained at 0.1 seconds
     if (time == 0) {
@@ -6223,7 +6213,7 @@ extern "C" u16 Randomizer_Item_Give(PlayState* play, GetItemEntry giEntry) {
         case RG_GREG_RUPEE:
             Rupees_ChangeBy(1);
             Flags_SetRandomizerInf(RAND_INF_GREG_FOUND);
-            gSaveContext.ship.stats.itemTimestamp[TIMESTAMP_FOUND_GREG] = GAMEPLAYSTAT_TOTAL_TIME;
+            gSaveContext.ship.stats.itemTimestamp[TIMESTAMP_FOUND_GREG] = static_cast<u32>(GAMEPLAYSTAT_TOTAL_TIME);
             break;
         case RG_TRIFORCE_PIECE:
             gSaveContext.ship.quest.data.randomizer.triforcePiecesCollected++;
@@ -6232,7 +6222,8 @@ extern "C" u16 Randomizer_Item_Give(PlayState* play, GetItemEntry giEntry) {
             // Teleport to credits when goal is reached.
             if (gSaveContext.ship.quest.data.randomizer.triforcePiecesCollected ==
                 (OTRGlobals::Instance->gRandomizer->GetRandoSettingValue(RSK_TRIFORCE_HUNT_PIECES_REQUIRED) + 1)) {
-                gSaveContext.ship.stats.itemTimestamp[TIMESTAMP_TRIFORCE_COMPLETED] = GAMEPLAYSTAT_TOTAL_TIME;
+                gSaveContext.ship.stats.itemTimestamp[TIMESTAMP_TRIFORCE_COMPLETED] =
+                    static_cast<u32>(GAMEPLAYSTAT_TOTAL_TIME);
                 gSaveContext.ship.stats.gameComplete = 1;
                 Flags_SetRandomizerInf(RAND_INF_GRANT_GANONS_BOSSKEY);
                 Play_PerformSave(play);
@@ -6265,12 +6256,12 @@ extern "C" u16 Randomizer_Item_Give(PlayState* play, GetItemEntry giEntry) {
         case RG_DEKU_STICK_BAG:
             Inventory_ChangeUpgrade(UPG_STICKS, 1);
             INV_CONTENT(ITEM_STICK) = ITEM_STICK;
-            AMMO(ITEM_STICK) = CUR_CAPACITY(UPG_STICKS);
+            AMMO(ITEM_STICK) = static_cast<int8_t>(CUR_CAPACITY(UPG_STICKS));
             break;
         case RG_DEKU_NUT_BAG:
             Inventory_ChangeUpgrade(UPG_NUTS, 1);
             INV_CONTENT(ITEM_NUT) = ITEM_NUT;
-            AMMO(ITEM_NUT) = CUR_CAPACITY(UPG_NUTS);
+            AMMO(ITEM_NUT) = static_cast<int8_t>(CUR_CAPACITY(UPG_NUTS));
             break;
         default:
             LUSLOG_WARN("Randomizer_Item_Give didn't have behaviour specified for getItemId=%d", item);

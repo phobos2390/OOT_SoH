@@ -9,10 +9,10 @@ void RegionTable_Init_LakeHylia() {
         //Events
         EventAccess(&logic->GossipStoneFairy, []{return logic->CallGossipFairy();}, true),
         EventAccess(&logic->BeanPlantFairy,   []{return logic->IsChild && logic->CanUse(RG_MAGIC_BEAN) && logic->CanUse(RG_SONG_OF_STORMS);}, true),
-        EventAccess(&logic->ButterflyFairy,   []{return logic->ButterflyFairy   || logic->CanUse(RG_STICKS);}, true),
-        EventAccess(&logic->BugShrub,         []{return logic->BugShrub         || (logic->IsChild && logic->CanCutShrubs());}, true),
-        EventAccess(&logic->ChildScarecrow,   []{return logic->ChildScarecrow   || (logic->IsChild && logic->HasItem(RG_FAIRY_OCARINA) && logic->OcarinaButtons() >= 2);}, true),
-        EventAccess(&logic->AdultScarecrow,   []{return logic->AdultScarecrow   || (logic->IsAdult && logic->HasItem(RG_FAIRY_OCARINA) && logic->OcarinaButtons() >= 2);}, true),
+        EventAccess(&logic->ButterflyFairy,   []{return logic->CanUse(RG_STICKS);}, true),
+        EventAccess(&logic->BugShrub,         []{return logic->IsChild && logic->CanCutShrubs();}, true),
+        EventAccess(&logic->ChildScarecrow,   []{return logic->IsChild && logic->HasItem(RG_FAIRY_OCARINA) && logic->OcarinaButtons() >= 2;}, true),
+        EventAccess(&logic->AdultScarecrow,   []{return logic->IsAdult && logic->HasItem(RG_FAIRY_OCARINA) && logic->OcarinaButtons() >= 2;}, true),
     }, {
         //Locations
         LOCATION_NNL(RC_LH_UNDERWATER_ITEM,              logic->IsChild && logic->HasItem(RG_SILVER_SCALE)),

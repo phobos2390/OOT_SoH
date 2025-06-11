@@ -2,7 +2,6 @@
 
 #include <stdint.h>
 #include "z64item.h"
-#include "randomizer_inf.h"
 
 #define MAX_TRICK_NAME_SIZE 50
 
@@ -184,10 +183,10 @@ typedef enum {
     LOGIC_GREG,
     LOGIC_PIECE_OF_HEART,
     LOGIC_HEART_CONTAINER,
-    LOGIC_NUTS,
+    LOGIC_BUY_NUTS,
     LOGIC_BUY_ARROW,
     LOGIC_BUY_BOMB,
-    LOGIC_STICKS,
+    LOGIC_BUY_STICKS,
     LOGIC_FISH_ACCESS,
     LOGIC_BUY_MAGIC_POTION,
     LOGIC_BUY_BOMBCHUS,
@@ -213,6 +212,15 @@ typedef enum {
     LOGIC_TRIFORCE_PIECES,
     LOGIC_MAX
 } LogicVal;
+
+#define DEFINE_RAND_INF(enum) enum,
+
+typedef enum {
+#include "randomizer_inf.h"
+    RAND_INF_MAX,
+} RandomizerInf;
+
+#undef DEFINE_RAND_INF
 
 typedef enum {
     RA_NONE,
@@ -291,7 +299,6 @@ typedef enum {
     RCTYPE_CRATE,                      // Crates
     RCTYPE_NLCRATE,                    // NL Crates
     RCTYPE_SMALL_CRATE,                // Small crates
-
     RCTYPE_TREE,                       // Trees
     RCTYPE_DUNGEON_REWARD,             // Dungeon rewards (blue warps)
     RCTYPE_OCARINA,                    // Ocarina locations
@@ -2610,40 +2617,67 @@ typedef enum {
     // End Crates
 
     // Start Trees
-    RC_HF_NEAR_KAK_TREE,
-    RC_HF_SOUTH_TREE,
+    RC_MARKET_DAY_TREE,
+    RC_HC_NEAR_GUARDS_TREE_1,
+    RC_HC_NEAR_GUARDS_TREE_2,
+    RC_HC_NEAR_GUARDS_TREE_3,
+    RC_HC_NEAR_GUARDS_TREE_4,
+    RC_HC_NEAR_GUARDS_TREE_5,
+    RC_HC_NEAR_GUARDS_TREE_6,
+    RC_HC_SKULLTULA_TREE,
+    RC_HC_GROTTO_TREE,
     RC_HF_NEAR_LLR_TREE,
     RC_HF_NEAR_LH_TREE,
-    RC_HF_NEAR_GV_TREE,
+    RC_HF_CHILD_NEAR_GV_TREE,
+    RC_HF_ADULT_NEAR_GV_TREE,
     RC_HF_NEAR_ZR_TREE,
-    RC_HF_NEAR_KAK_S_TREE,
-    RC_MARKET_DAY_TREE,
-    RC_HC_NEAR_GUARDS_TREE_5,
-    RC_HC_NEAR_GUARDS_TREE_4,
-    RC_HC_NEAR_GUARDS_TREE_3,
-    RC_HC_NEAR_GUARDS_TREE_2,
-    RC_HC_NEAR_GUARDS_TREE_1,
-    RC_HF_SOUTH_TREE_1,
-    RC_HF_NORTHWEST_TREE_2,
-    RC_HF_SOUTHEAST_TREE_4,
-    RC_HF_NORTHWEST_TREE_1,
-    RC_HF_EAST_TREE_1,
-    RC_HF_SOUTHEAST_TREE_3,
-    RC_HF_SOUTHEAST_TREE_2,
-    RC_HF_NEAR_HC_GROTTO_TREE_3,
-    RC_HF_SOUTHEAST_TREE_1,
-    RC_HF_TREE_YELLOW_GROTTO_TREE,
-    RC_HF_TREE_NEAR_HC_GROTTO_2,
+    RC_HF_NEAR_KAK_TREE,
+    RC_HF_NEAR_KAK_SMALL_TREE,
     RC_HF_TREE_NEAR_HC_GROTTO_1,
+    RC_HF_TREE_NEAR_HC_GROTTO_2,
+    RC_HF_TREE_NEAR_HC_GROTTO_3,
+    RC_HF_NORTHWEST_TREE_1,
+    RC_HF_NORTHWEST_TREE_2,
+    RC_HF_NORTHWEST_TREE_3,
+    RC_HF_NORTHWEST_TREE_4,
+    RC_HF_NORTHWEST_TREE_5,
+    RC_HF_NORTHWEST_TREE_6,
+    RC_HF_EAST_TREE_1,
+    RC_HF_EAST_TREE_2,
+    RC_HF_EAST_TREE_3,
+    RC_HF_EAST_TREE_4,
+    RC_HF_EAST_TREE_5,
+    RC_HF_EAST_TREE_6,
+    RC_HF_SOUTHEAST_TREE_1,
+    RC_HF_SOUTHEAST_TREE_2,
+    RC_HF_SOUTHEAST_TREE_3,
+    RC_HF_SOUTHEAST_TREE_4,
+    RC_HF_SOUTHEAST_TREE_5,
+    RC_HF_SOUTHEAST_TREE_6,
+    RC_HF_SOUTHEAST_TREE_7,
+    RC_HF_SOUTHEAST_TREE_8,
+    RC_HF_SOUTHEAST_TREE_9,
+    RC_HF_SOUTHEAST_TREE_10,
+    RC_HF_SOUTHEAST_TREE_11,
+    RC_HF_SOUTHEAST_TREE_12,
+    RC_HF_SOUTHEAST_TREE_13,
+    RC_HF_SOUTHEAST_TREE_14,
+    RC_HF_SOUTHEAST_TREE_15,
+    RC_HF_SOUTHEAST_TREE_16,
+    RC_HF_SOUTHEAST_TREE_17,
+    RC_HF_SOUTHEAST_TREE_18,
+    RC_HF_SOUTHEAST_TREE_19,
+    RC_HF_CHILD_SOUTHEAST_TREE_1,
+    RC_HF_CHILD_SOUTHEAST_TREE_2,
+    RC_HF_CHILD_SOUTHEAST_TREE_3,
+    RC_HF_CHILD_SOUTHEAST_TREE_4,
+    RC_HF_CHILD_SOUTHEAST_TREE_5,
+    RC_HF_CHILD_SOUTHEAST_TREE_6,
+    RC_HF_TEKTITE_GROTTO_TREE,
     RC_ZF_TREE,
     RC_ZR_TREE,
     RC_KAK_TREE,
     RC_LLR_TREE,
-    RC_HF_ADULT_NEAR_GV_TREE,
-    RC_HC_SKULLTULA_TREE,
-    RC_HC_NEAR_GUARDS_TREE,
-    RC_HC_GROTTO_TREE,
-
     // End Trees
 
     RC_PIERRE,
@@ -4019,6 +4053,8 @@ typedef enum {
     RT_MEGASIDEHOP_BOMB,
     RT_MEGASIDEHOP_BOMBCHU,
     RT_NAVI_DIVE,
+    RT_BOTTOM_OF_THE_WELL_NAVI_DIVE,
+    RT_LOST_WOOD_NAVI_DIVE,
     RT_OCARINA_ITEMS,
     RT_OCARINA_ITEMS_BOMB,
     RT_OCARINA_ITEMS_ESS,
@@ -5737,7 +5773,6 @@ typedef enum {
     RHT_CRATE_SPIRIT_TEMPLE,
     RHT_CRATE_SHADOW_TEMPLE,
     RHT_CRATE_GERUDO_TRAINING_GROUND,
-
     // Shuffle Trees
     RHT_TREE_HYRULE_FIELD,
     RHT_TREE_MARKET,
@@ -6126,7 +6161,6 @@ typedef enum {
     RSK_SHUFFLE_GERUDO_MEMBERSHIP_CARD,
     RSK_SHUFFLE_POTS,
     RSK_SHUFFLE_CRATES,
-
     RSK_SHUFFLE_TREES,
     RSK_SHUFFLE_FROG_SONG_RUPEES,
     RSK_ITEM_POOL,
@@ -6731,11 +6765,6 @@ typedef struct PotIdentity {
     RandomizerCheck randomizerCheck;
 } PotIdentity;
 
-typedef struct TreeIdentity {
-    RandomizerInf randomizerInf;
-    RandomizerCheck randomizerCheck;
-} TreeIdentity;
-
 typedef struct FishIdentity {
     RandomizerInf randomizerInf;
     RandomizerCheck randomizerCheck;
@@ -6760,6 +6789,11 @@ typedef struct RockIdentity {
     RandomizerInf randomizerInf;
     RandomizerCheck randomizerCheck;
 } RockIdentity;
+
+typedef struct TreeIdentity {
+    RandomizerInf randomizerInf;
+    RandomizerCheck randomizerCheck;
+} TreeIdentity;
 
 typedef enum {
     TRACKER_WINDOW_FLOATING,

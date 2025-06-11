@@ -60,7 +60,7 @@ void RegionTable_Init_DeathMountainTrail() {
     areaTable[RR_DEATH_MOUNTAIN_SUMMIT] = Region("Death Mountain Summit", "Death Mountain", {RA_DEATH_MOUNTAIN_TRAIL}, DAY_NIGHT_CYCLE, {
         //Events
         EventAccess(&logic->GossipStoneFairy, []{return logic->CallGossipFairy();}),
-        EventAccess(&logic->BugRock,          []{return logic->BugRock            || logic->IsChild;}),
+        EventAccess(&logic->BugRock,          []{return logic->IsChild;}),
     }, {
         //Locations
         LOCATION_NNL(RC_DMT_TRADE_BROKEN_SWORD,     logic->IsAdult && logic->CanUse(RG_BROKEN_SWORD)),

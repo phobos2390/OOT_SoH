@@ -7,9 +7,9 @@ void RegionTable_Init_KokiriForest() {
     // clang-format off
     areaTable[RR_KOKIRI_FOREST] = Region("Kokiri Forest", "Kokiri Forest", {RA_KOKIRI_FOREST}, NO_DAY_NIGHT_CYCLE, {
         //Events
-        EventAccess(&logic->BeanPlantFairy,           []{return logic->IsChild && logic->CanUse(RG_MAGIC_BEAN) && logic->CanUse(RG_SONG_OF_STORMS);}, true),
+        EventAccess(&logic->BeanPlantFairy,           []{return logic->IsChild && logic->CanUse(RG_MAGIC_BEAN) && logic->CanUse(RG_SONG_OF_STORMS);}),
         EventAccess(&logic->GossipStoneFairy,         []{return logic->CallGossipFairyExceptSuns();}, true),
-        EventAccess(&logic->ShowedMidoSwordAndShield, []{return logic->ShowedMidoSwordAndShield || (logic->IsChild && logic->CanUse(RG_KOKIRI_SWORD) && logic->CanUse(RG_DEKU_SHIELD));}),
+        EventAccess(&logic->ShowedMidoSwordAndShield, []{return logic->IsChild && logic->CanUse(RG_KOKIRI_SWORD) && logic->CanUse(RG_DEKU_SHIELD);}),
     }, {
         //Locations
         LOCATION(RC_KF_KOKIRI_SWORD_CHEST,          logic->IsChild),
@@ -105,7 +105,7 @@ void RegionTable_Init_KokiriForest() {
         //Events
         EventAccess(&logic->DekuBabaSticks,           []{return logic->CanGetDekuBabaSticks();}, true),
         EventAccess(&logic->DekuBabaNuts,             []{return logic->CanGetDekuBabaNuts();}, true),
-        EventAccess(&logic->ShowedMidoSwordAndShield, []{return logic->ShowedMidoSwordAndShield || (logic->IsChild && logic->CanUse(RG_KOKIRI_SWORD) && logic->CanUse(RG_DEKU_SHIELD));}, true),
+        EventAccess(&logic->ShowedMidoSwordAndShield, []{return logic->IsChild && logic->CanUse(RG_KOKIRI_SWORD) && logic->CanUse(RG_DEKU_SHIELD);}),
     }, {
         //Locations
         LOCATION_NNL(RC_KF_DEKU_TREE_LEFT_GOSSIP_STONE_FAIRY,      logic->CallGossipFairyExceptSuns()),
