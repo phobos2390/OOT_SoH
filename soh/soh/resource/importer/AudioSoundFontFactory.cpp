@@ -4,6 +4,7 @@
 #include "libultraship/libultraship.h"
 #include "StringHelper.h"
 #include "z64audio.h"
+#include <tinyxml2.h>
 
 namespace SOH {
 std::shared_ptr<Ship::IResource> ResourceFactoryBinaryAudioSoundFontV2::ReadResource(std::shared_ptr<Ship::File> file, std::shared_ptr<Ship::ResourceInitData> initData) {

@@ -9,7 +9,6 @@
 #include "soh/Enhancements/randomizer/fishsanity.h"
 #include "soh/Enhancements/randomizer/static_data.h"
 #include "soh/Enhancements/randomizer/ShufflePots.h"
-#include "soh/Enhancements/randomizer/ShuffleTrees.h"
 #include "soh/Enhancements/randomizer/ShuffleFreestanding.h"
 #include "soh/Enhancements/game-interactor/GameInteractor.h"
 #include "soh/Enhancements/game-interactor/GameInteractor_Hooks.h"
@@ -2496,14 +2495,6 @@ void RandomizerRegisterHooks() {
 
         if (RAND_GET_OPTION(RSK_SHUFFLE_FAIRIES)) {
             ShuffleFairies_RegisterHooks();
-        }
-
-        if (RAND_GET_OPTION(RSK_SHUFFLE_TREES) != RO_SHUFFLE_TREES_OFF) {
-            shuffleTreesOnActorInitHook =
-                GameInteractor::Instance->RegisterGameHook<GameInteractor::OnActorInit>(EnWood02_RandomizerInit);
-            shuffleTreesOnVanillaBehaviorHook =
-                GameInteractor::Instance->RegisterGameHook<GameInteractor::OnVanillaBehavior>(
-                    ShuffleTrees_OnVanillaBehaviorHandler);
         }
     });
 }

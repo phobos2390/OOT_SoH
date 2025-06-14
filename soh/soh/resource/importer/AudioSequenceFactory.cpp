@@ -5,6 +5,7 @@
 #include "libultraship/libultraship.h"
 #include "BinaryWriter.h"
 #include <type_traits>
+#include <tinyxml2.h>
 
 namespace SOH {
 std::shared_ptr<Ship::IResource> ResourceFactoryBinaryAudioSequenceV2::ReadResource(std::shared_ptr<Ship::File> file, std::shared_ptr<Ship::ResourceInitData> initData) {

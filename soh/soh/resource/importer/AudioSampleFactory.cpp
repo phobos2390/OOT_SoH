@@ -14,6 +14,7 @@
 #include <dr_flac.h>
 
 #include "vorbis/vorbisfile.h"
+#include <tinyxml2.h>
 
 struct OggFileData {
     void* data;
