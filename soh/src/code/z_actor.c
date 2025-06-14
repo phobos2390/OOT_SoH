@@ -1257,20 +1257,7 @@ void Actor_Init(Actor* actor, PlayState* play) {
     if (Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
         Actor_SetObjectDependency(play, actor);
 
-        if (GameInteractor_ShouldActorInit(actor)) {
-            actor->init(actor, play);
-            actor->init = NULL;
-
-            GameInteractor_ExecuteOnActorInit(actor);
-
-            // For enemy health bar we need to know the max health during init
-            if (actor->category == ACTORCAT_ENEMY) {
-                actor->maximumHealth = actor->colChkInfo.health;
-            }
-        } else {
-            actor->init = NULL;
-            Actor_Kill(actor);
-        }
+        GameInteractor_ExecuteOnActorInit(actor);
     }
 }
 
@@ -2632,20 +2619,7 @@ void Actor_UpdateAll(PlayState* play, ActorContext* actorCtx) {
                 if (Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {
                     Actor_SetObjectDependency(play, actor);
 
-                    if (GameInteractor_ShouldActorInit(actor)) {
-                        actor->init(actor, play);
-                        actor->init = NULL;
-
-                        GameInteractor_ExecuteOnActorInit(actor);
-
-                        // For enemy health bar we need to know the max health during init
-                        if (actor->category == ACTORCAT_ENEMY) {
-                            actor->maximumHealth = actor->colChkInfo.health;
-                        }
-                    } else {
-                        actor->init = NULL;
-                        Actor_Kill(actor);
-                    }
+                    GameInteractor_ExecuteOnActorInit(actor);
                 }
                 actor = actor->next;
             } else if (!Object_IsLoaded(&play->objectCtx, actor->objBankIndex)) {

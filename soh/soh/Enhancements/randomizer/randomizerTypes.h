@@ -6204,7 +6204,6 @@ typedef enum {
     RSK_STARTING_NUTS,
     RSK_FULL_WALLETS,
     RSK_SHUFFLE_CHEST_MINIGAME,
-    RSK_CUCCO_COUNT,
     RSK_BIG_POE_COUNT,
     RSK_SKIP_EPONA_RACE,
     RSK_COMPLETE_MASK_QUEST,
@@ -6550,6 +6549,7 @@ typedef enum {
 
 // Song shuffle Settings (Song locations, Dungeon rewards, anywhere)
 typedef enum {
+    RO_SONG_SHUFFLE_OFF,
     RO_SONG_SHUFFLE_SONG_LOCATIONS,
     RO_SONG_SHUFFLE_DUNGEON_REWARDS,
     RO_SONG_SHUFFLE_ANYWHERE,

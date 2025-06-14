@@ -22,6 +22,14 @@ typedef enum {
 
     // #### `result`
     // ```c
+    // sBgPoEventPuzzleState == 0xF
+    // ```
+    // #### `args`
+    // - None
+    VB_AMY_SOLVE,
+
+    // #### `result`
+    // ```c
     // this->actor.textId == 0x401A
     // ```
     // #### `args`
@@ -575,6 +583,14 @@ typedef enum {
     // #### `args`
     // - None
     VB_GANON_HEAL_BEFORE_FIGHT,
+
+    // #### `result`
+    // ```c
+    // true
+    // ```
+    // #### `args`
+    // - `*EnGe2`
+    VB_GERUDO_GUARD_SET_ACTION_AFTER_TALK,
 
     // #### `result`
     // See logic in
@@ -1700,6 +1716,15 @@ typedef enum {
 
     // #### `result`
     // ```c
+    // dropId == ITEM00_STICK
+    // ```
+    // #### `args`
+    // - None
+    VB_PREVENT_ADULT_STICK,
+
+    // #### `result`
+    // #### `result`
+    // ```c
     // true
     // ```
     // #### `args`
@@ -2107,6 +2132,9 @@ typedef enum {
     VB_TREE_DROP_ITEM,
 
     // #### `result`
+    // - `*EnWood02`
+    VB_TREE_DROP_COLLECTIBLE,
+
     // ```c
     // true
     // ```
