@@ -23,6 +23,9 @@ void RegionTable_Init_ZorasFountain() {
         LOCATION_NNL(RC_ZF_NEAR_JABU_POT_2,              logic->IsChild && logic->CanBreakPots()),
         LOCATION_NNL(RC_ZF_NEAR_JABU_POT_3,              logic->IsChild && logic->CanBreakPots()),
         LOCATION_NNL(RC_ZF_NEAR_JABU_POT_4,              logic->IsChild && logic->CanBreakPots()),
+        LOCATION_NNL(RC_ZF_BOULDER,                      logic->BlastOrSmash()),
+        LOCATION_NNL(RC_ZF_SILVER_BOULDER,               logic->CanUse(RG_SILVER_GAUNTLETS)),
+        LOCATION_NNL(RC_ZF_UNDERGROUND_BOULDER,          logic->CanUse(RG_SILVER_GAUNTLETS) && logic->BlastOrSmash()),
         LOCATION_NNL(RC_ZF_TREE,                         logic->IsChild && logic->CanBonkTrees()),
     }, {
         //Exits
