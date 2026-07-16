@@ -2,12 +2,14 @@
 #include <string.h>
 #include <assert.h>
 
+#include <libultraship/bridge/resourcebridge.h>
 #include <libultraship/libultra.h>
 #include "global.h"
 #include "soh/OTRGlobals.h"
 #include "soh/Enhancements/audio/AudioCollection.h"
 #include "soh/Enhancements/audio/AudioEditor.h"
 #include "soh/ResourceManagerHelpers.h"
+#include "soh/Enhancements/game-interactor/GameInteractor_Hooks.h"
 #include <stdio.h>
 #ifdef _MSC_VER
 #define strdup _strdup
@@ -295,18 +297,19 @@ void AudioLoad_InitSampleDmaBuffers(s32 arg0) {
     gAudioContext.sampleDmaReuseQueue2WrPos = gAudioContext.sampleDmaCount - gAudioContext.sampleDmaListSize1;
 }
 
+// SOH [Port] Completely reworked from decomp: SAF custom fontIds can exceed the native table; bounds-check against
+// fontMapSize to avoid OOB reads.
 s32 AudioLoad_IsFontLoadComplete(s32 fontId) {
-    return true;
     if (fontId == 0xFF) {
         return true;
-
-    } else if (gAudioContext.fontLoadStatus[fontId] >= 2) {
-        return true;
-    } else if (gAudioContext.fontLoadStatus[AudioLoad_GetRealTableIndex(FONT_TABLE, fontId)] >= 2) {
-        return true;
-    } else {
-        return false;
     }
+    // Resolve indirection (identity for FONT_TABLE today, but kept for parity with other tables).
+    fontId = (s32)AudioLoad_GetRealTableIndex(FONT_TABLE, (u32)fontId);
+    if ((size_t)fontId >= fontMapSize) {
+        // No entry in the font map — SAF sequence with no associated soundfont, treat as ready.
+        return true;
+    }
+    return gAudioContext.fontLoadStatus[fontId] >= 2;
 }
 
 s32 AudioLoad_IsSeqLoadComplete(s32 seqId) {
@@ -334,7 +337,7 @@ s32 AudioLoad_IsSampleLoadComplete(s32 sampleBankId) {
 }
 
 void AudioLoad_SetFontLoadStatus(s32 fontId, s32 status) {
-    if ((fontId != 0xFF) && (gAudioContext.fontLoadStatus[fontId] != 5)) {
+    if ((fontId != 0xFF) && ((size_t)fontId < fontMapSize) && (gAudioContext.fontLoadStatus[fontId] != 5)) {
         gAudioContext.fontLoadStatus[fontId] = status;
     }
 }
@@ -579,20 +582,17 @@ s32 AudioLoad_SyncInitSeqPlayerInternal(s32 playerIdx, s32 seqId, s32 arg2) {
     s32 index;
     s32 numFonts;
     s32 fontId;
-    s8 authCachePolicy = -1; // since 0 is a valid cache policy value
 
     AudioSeq_SequencePlayerDisable(seqPlayer);
 
     fontId = 0xFF;
 
-    if (gAudioContext.seqReplaced[playerIdx]) {
-        authCachePolicy = seqCachePolicyMap[seqId];
-        seqId = gAudioContext.seqToPlay[playerIdx];
+    // seqId is the resolved 16-bit id from func_800F9280(). Reject ids with no loaded sequence; the
+    // map has sequenceMapSize + 0xF slots (custom ids skip the reserved 129-135 range).
+    if (seqId < 0 || (size_t)seqId >= sequenceMapSize + 0xF || sequenceMap[seqId] == NULL) {
+        return 0;
     }
     SequenceData seqData2 = ResourceMgr_LoadSeqByName(sequenceMap[seqId]);
-    if (authCachePolicy != -1) {
-        seqData2.cachePolicy = authCachePolicy;
-    }
 
     for (int i = 0; i < seqData2.numFonts; i++) {
         fontId = seqData2.fonts[i];
@@ -630,21 +630,7 @@ s32 AudioLoad_SyncInitSeqPlayerInternal(s32 playerIdx, s32 seqId, s32 arg2) {
     AudioSeq_SkipForwardSequence(seqPlayer);
     //! @bug missing return (but the return value is not used so it's not UB)
 
-    // Keep track of the previous sequence/scene so we don't repeat notifications
-    static uint16_t previousSeqId = UINT16_MAX;
-    static int16_t previousSceneNum = INT16_MAX;
-    if (CVarGetInteger(CVAR_AUDIO("SeqNameOverlay"), 0) && playerIdx == SEQ_PLAYER_BGM_MAIN &&
-        (seqId != previousSeqId || (gPlayState != NULL && gPlayState->sceneNum != previousSceneNum))) {
-
-        previousSeqId = seqId;
-        if (gPlayState != NULL) {
-            previousSceneNum = gPlayState->sceneNum;
-        }
-        const char* sequenceName = AudioCollection_GetSequenceName(seqId);
-        if (sequenceName != NULL) {
-            Overlay_DisplayText_Seconds(CVarGetInteger(CVAR_AUDIO("SeqNameOverlayDuration"), 5), sequenceName);
-        }
-    }
+    GameInteractor_ExecuteOnSeqPlayerInit(playerIdx, seqId);
 }
 
 u8* AudioLoad_SyncLoadSeq(s32 seqId) {
@@ -1355,7 +1341,8 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
     char** seqList = ResourceMgr_ListFiles("audio/sequences*", &seqListSize);
     char** customSeqList = ResourceMgr_ListFiles("custom/music/*", &customSeqListSize);
     sequenceMapSize = (size_t)(seqListSize + customSeqListSize);
-    sequenceMap = malloc((sequenceMapSize + 0xF) * sizeof(char*));
+    // calloc: unassigned slots stay NULL for the guard in AudioLoad_SyncInitSeqPlayerInternal().
+    sequenceMap = calloc(sequenceMapSize + 0xF, sizeof(char*));
 
     gAudioContext.seqLoadStatus = malloc(sequenceMapSize);
     memset(gAudioContext.seqLoadStatus, 5, sequenceMapSize);
@@ -1365,6 +1352,9 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
         seqCachePolicyMap[sDat.seqNumber] = sDat.cachePolicy;
     }
 
+    for (int i = 0; i < seqListSize; i++) {
+        free(seqList[i]);
+    }
     free(seqList);
 
     // 2S2H [Streamed Audio] We need to load the custom songs after the fonts because streamed songs will use a hash to
@@ -1374,7 +1364,7 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
     char** fntList = ResourceMgr_ListFiles("audio/fonts*", &fntListSize);
     char** customFntList = ResourceMgr_ListFiles("custom/fonts/*", &customFntListSize);
 
-    gAudioContext.fontLoadStatus = malloc(customFntListSize + fntListSize);
+    gAudioContext.fontLoadStatus = calloc(customFntListSize + fntListSize, sizeof(u8));
     fontMap = calloc(customFntListSize + fntListSize, sizeof(char*));
     fontMapSize = customFntListSize + fntListSize;
     for (int i = 0; i < fntListSize; i++) {
@@ -1382,6 +1372,9 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
         fontMap[sf->fntIndex] = strdup(fntList[i]);
     }
 
+    for (int i = 0; i < fntListSize; i++) {
+        free(fntList[i]);
+    }
     free(fntList);
 
     int customFontStart = fntListSize;
@@ -1389,6 +1382,9 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
         SoundFont* sf = ResourceMgr_LoadAudioSoundFontByName(customFntList[i - customFontStart]);
         sf->fntIndex = i;
         fontMap[i] = strdup(customFntList[i - customFontStart]);
+    }
+    for (int i = 0; i < customFntListSize; i++) {
+        free(customFntList[i]);
     }
     free(customFntList);
 
@@ -1437,14 +1433,26 @@ void AudioLoad_Init(void* heap, size_t heapSize) {
             seqNum++;
         }
 
+        // Sequence ids are carried in 16 bits; fail gracefully past the limit.
+        if (seqNum > 0xFFFF) {
+            Messagebox_ShowErrorBox("Too Many Sequences",
+                                    "The number of custom sequences exceeds the supported limit (65535). Some custom "
+                                    "music will not be available. Please reduce the size of your music pack(s).");
+            LUSLOG_ERROR("Custom sequence limit (0xFFFF) exceeded; remaining custom sequences skipped.");
+            break;
+        }
+
         AudioCollection_AddToCollection(customSeqList[j], seqNum);
 
         sDat->seqNumber = seqNum;
-        printf("%d\n", seqNum);
+        LUSLOG_DEBUG("Registered custom sequence \"%s\" as seqNum %d", customSeqList[j], seqNum);
         sequenceMap[sDat->seqNumber] = strdup(customSeqList[j]);
         seqNum++;
     }
 
+    for (int i = 0; i < customSeqListSize; i++) {
+        free(customSeqList[i]);
+    }
     free(customSeqList);
 
     numFonts = fntListSize;

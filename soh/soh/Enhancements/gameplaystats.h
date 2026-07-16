@@ -22,9 +22,9 @@ char* GameplayStats_GetCurrentTime();
 #define GAMEPLAYSTAT_TOTAL_TIME                                                                \
     (gSaveContext.ship.stats.rtaTiming                                                         \
          ? (!gSaveContext.ship.stats.gameComplete                                              \
-                ? (!gSaveContext.ship.stats.fileCreatedAt                                      \
+                ? (!gSaveContext.ship.stats.firstInput                                         \
                        ? 0                                                                     \
-                       : ((GetUnixTimestamp() - gSaveContext.ship.stats.fileCreatedAt) / 100)) \
+                       : ((GetUnixTimestamp() - gSaveContext.ship.stats.firstInput) / 100))    \
                 : (gSaveContext.ship.stats.itemTimestamp[TIMESTAMP_DEFEAT_GANON]               \
                        ? gSaveContext.ship.stats.itemTimestamp[TIMESTAMP_DEFEAT_GANON]         \
                        : gSaveContext.ship.stats.itemTimestamp[TIMESTAMP_TRIFORCE_COMPLETED])) \
@@ -51,9 +51,74 @@ typedef enum {
     /* 0xA9 */ TIMESTAMP_DEFEAT_GANON,         // z_boss_ganon2.c
     /* 0xA9 */ TIMESTAMP_BOSSRUSH_FINISH,      // z_boss_ganon2.c
     /* 0xAA */ TIMESTAMP_FOUND_GREG,           // z_parameter.c
-    /* 0xAA */ TIMESTAMP_TRIFORCE_COMPLETED,   // z_parameter.c
-    /* 0xAB */ TIMESTAMP_MAX
-
+    /* 0xAB */ TIMESTAMP_TRIFORCE_COMPLETED,   // z_parameter.c
+    /* 0xAC */ TIMESTAMP_FOUND_GOHMA_SOUL,
+    /* 0xAD */ TIMESTAMP_FOUND_KING_DODONGO_SOUL,
+    /* 0xAE */ TIMESTAMP_FOUND_BARINADE_SOUL,
+    /* 0xAF */ TIMESTAMP_FOUND_PHANTOM_GANON_SOUL,
+    /* 0xB0 */ TIMESTAMP_FOUND_VOLVAGIA_SOUL,
+    /* 0xB1 */ TIMESTAMP_FOUND_MORPHA_SOUL,
+    /* 0xB2 */ TIMESTAMP_FOUND_BONGO_BONGO_SOUL,
+    /* 0xB3 */ TIMESTAMP_FOUND_TWINROVA_SOUL,
+    /* 0xB5 */ TIMESTAMP_FOUND_GANON_SOUL,
+    /* 0xB6 */ TIMESTAMP_FOUND_BRONZE_SCALE,
+    /* 0xB7 */ TIMESTAMP_FOUND_OCARINA_A_BUTTON,
+    /* 0xB8 */ TIMESTAMP_FOUND_OCARINA_C_UP_BUTTON,
+    /* 0xB9 */ TIMESTAMP_FOUND_OCARINA_C_DOWN_BUTTON,
+    /* 0xBA */ TIMESTAMP_FOUND_OCARINA_C_LEFT_BUTTON,
+    /* 0xBB */ TIMESTAMP_FOUND_OCARINA_C_RIGHT_BUTTON,
+    /* 0xBC */ TIMESTAMP_FOUND_FISHING_POLE,
+    /* 0xBD */ TIMESTAMP_FOUND_GUARD_HOUSE_KEY,
+    /* 0xBE */ TIMESTAMP_FOUND_MARKET_BAZAAR_KEY,
+    /* 0xBF */ TIMESTAMP_FOUND_MARKET_POTION_SHOP_KEY,
+    /* 0xC0 */ TIMESTAMP_FOUND_MASK_SHOP_KEY,
+    /* 0xC1 */ TIMESTAMP_FOUND_MARKET_SHOOTING_GALLERY_KEY,
+    /* 0xC2 */ TIMESTAMP_FOUND_BOMBCHU_BOWLING_KEY,
+    /* 0xC3 */ TIMESTAMP_FOUND_TREASURE_CHEST_GAME_BUILDING_KEY,
+    /* 0xC4 */ TIMESTAMP_FOUND_BOMBCHU_SHOP_KEY,
+    /* 0xC5 */ TIMESTAMP_FOUND_RICHARDS_HOUSE_KEY,
+    /* 0xC6 */ TIMESTAMP_FOUND_ALLEY_HOUSE_KEY,
+    /* 0xC7 */ TIMESTAMP_FOUND_KAK_BAZAAR_KEY,
+    /* 0xC8 */ TIMESTAMP_FOUND_KAK_POTION_SHOP_KEY,
+    /* 0xC9 */ TIMESTAMP_FOUND_BOSS_HOUSE_KEY,
+    /* 0xCA */ TIMESTAMP_FOUND_GRANNYS_POTION_SHOP_KEY,
+    /* 0xCB */ TIMESTAMP_FOUND_SKULLTULA_HOUSE_KEY,
+    /* 0xCC */ TIMESTAMP_FOUND_IMPAS_HOUSE_KEY,
+    /* 0xCD */ TIMESTAMP_FOUND_WINDMILL_KEY,
+    /* 0xCE */ TIMESTAMP_FOUND_KAK_SHOOTING_GALLERY_KEY,
+    /* 0xCF */ TIMESTAMP_FOUND_DAMPES_HUT_KEY,
+    /* 0xD0 */ TIMESTAMP_FOUND_TALONS_HOUSE_KEY,
+    /* 0xD1 */ TIMESTAMP_FOUND_STABLES_KEY,
+    /* 0xD2 */ TIMESTAMP_FOUND_BACK_TOWER_KEY,
+    /* 0xD3 */ TIMESTAMP_FOUND_HYLIA_LAB_KEY,
+    /* 0xD4 */ TIMESTAMP_FOUND_FISHING_HOLE_KEY,
+    /* 0xD5 */ TIMESTAMP_FOUND_CHILD_WALLET,
+    /* 0xD6 */ TIMESTAMP_FOUND_TYCOON_WALLET,
+    /* 0xD7 */ TIMESTAMP_FOUND_DEKU_STICK_BAG,
+    /* 0xD8 */ TIMESTAMP_FOUND_DEKU_NUT_BAG,
+    /* 0xD9 */ TIMESTAMP_FOUND_GRAB,
+    /* 0xDA */ TIMESTAMP_FOUND_CLIMB,
+    /* 0xDB */ TIMESTAMP_FOUND_CRAWL,
+    /* 0xDC */ TIMESTAMP_FOUND_OPEN_CHESTS,
+    /* 0xDD */ TIMESTAMP_FOUND_SPEAK_DEKU,
+    /* 0xDE */ TIMESTAMP_FOUND_SPEAK_GERUDO,
+    /* 0xDF */ TIMESTAMP_FOUND_SPEAK_GORON,
+    /* 0xE0 */ TIMESTAMP_FOUND_SPEAK_HYLIAN,
+    /* 0xE1 */ TIMESTAMP_FOUND_SPEAK_KOKIRI,
+    /* 0xE2 */ TIMESTAMP_FOUND_SPEAK_ZORA,
+    /* 0xE3 */ TIMESTAMP_FOUND_DMC_BEAN_SOUL,
+    /* 0xE4 */ TIMESTAMP_FOUND_DMT_BEAN_SOUL,
+    /* 0xE5 */ TIMESTAMP_FOUND_COLOSSUS_BEAN_SOUL,
+    /* 0xE6 */ TIMESTAMP_FOUND_GV_BEAN_SOUL,
+    /* 0xE7 */ TIMESTAMP_FOUND_GY_BEAN_SOUL,
+    /* 0xE8 */ TIMESTAMP_FOUND_KF_BEAN_SOUL,
+    /* 0xE9 */ TIMESTAMP_FOUND_LH_BEAN_SOUL,
+    /* 0xEA */ TIMESTAMP_FOUND_LW_BRIDGE_BEAN_SOUL,
+    /* 0xEB */ TIMESTAMP_FOUND_LW_MEADOW_BEAN_SOUL,
+    /* 0xEC */ TIMESTAMP_FOUND_ZR_BEAN_SOUL,
+    /* 0xED */ TIMESTAMP_FOUND_SKELETON_KEY,
+    /* 0xEE */ TIMESTAMP_FOUND_ROCS_FEATHER,
+    /* 0xF0 */ TIMESTAMP_MAX
 } GameplayStatTimestamp;
 
 typedef enum {

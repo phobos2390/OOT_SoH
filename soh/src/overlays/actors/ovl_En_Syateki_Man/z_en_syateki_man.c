@@ -4,7 +4,6 @@
 #include "objects/object_ossan/object_ossan.h"
 #include "soh/Enhancements/randomizer/randomizer_entrance.h"
 #include "soh/Enhancements/custom-message/CustomMessageTypes.h"
-#include "soh/OTRGlobals.h"
 #include "soh/ResourceManagerHelpers.h"
 #include "soh/Enhancements/game-interactor/GameInteractor_Hooks.h"
 
@@ -140,8 +139,8 @@ static u16 sBgmList[] = {
     NA_BGM_WATER_TEMPLE,
     NA_BGM_BRIDGE_TO_GANONS,
     NA_BGM_VARIOUS_SFX,
-    NA_BGM_OCARINA_OF_TIME,
-    NA_BGM_OCARINA_OF_TIME,
+    NA_BGM_SEAL_OF_SAGES,
+    NA_BGM_SEAL_OF_SAGES,
     NA_BGM_GERUDO_VALLEY,
     NA_BGM_POTION_SHOP,
     NA_BGM_KOTAKE_KOUME,
@@ -150,7 +149,7 @@ static u16 sBgmList[] = {
     NA_BGM_UNDERGROUND,
     NA_BGM_GANONDORF_BOSS,
     NA_BGM_GANON_BOSS,
-    NA_BGM_END_DEMO,
+    NA_BGM_OCARINA_OF_TIME,
 };
 
 static s16 sTextIds[] = { 0x2B, 0x2E, 0xC8, 0x2D };
@@ -206,7 +205,7 @@ void EnSyatekiMan_Idle(EnSyatekiMan* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, play)) {
         this->actionFunc = EnSyatekiMan_Talk;
     } else {
-        func_8002F2CC(&this->actor, play, 100.0f);
+        Actor_OfferTalk(&this->actor, play, 100.0f);
     }
 }
 
@@ -306,7 +305,7 @@ void EnSyatekiMan_WaitForGame(EnSyatekiMan* this, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     gallery = ((EnSyatekiItm*)this->actor.parent);
     if ((gallery->actor.update != NULL) && (gallery->signal == ENSYATEKI_END)) {
-        this->csCam = OnePointCutscene_Init(play, 8002, -99, &this->actor, MAIN_CAM);
+        this->csCam = OnePointCutscene_Init(play, 8002, -99, &this->actor, CAM_ID_MAIN);
         switch (gallery->hitCount) {
             case 10:
                 this->gameResult = SYATEKI_RESULT_WINNER;
@@ -499,7 +498,7 @@ void EnSyatekiMan_Update(Actor* thisx, PlayState* play) {
     this->blinkFunc(this);
     this->actor.focus.pos.y = 70.0f;
     Actor_SetFocus(&this->actor, 70.0f);
-    func_80038290(play, &this->actor, &this->headRot, &this->bodyRot, this->actor.focus.pos);
+    Actor_TrackPlayer(play, &this->actor, &this->headRot, &this->bodyRot, this->actor.focus.pos);
 }
 
 s32 EnSyatekiMan_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {

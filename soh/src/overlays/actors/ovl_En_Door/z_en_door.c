@@ -209,6 +209,7 @@ void EnDoor_Idle(EnDoor* this, PlayState* play) {
                 Flags_SetSwitch(play, this->actor.params & 0x3F);
             }
             Audio_PlayActorSound2(&this->actor, NA_SE_EV_CHAIN_KEY_UNLOCK);
+            GameInteractor_ExecuteOnDungeonKeyUsedHooks(gSaveContext.mapIndex);
         }
     } else if (!Player_InCsMode(play)) {
         if (fabsf(playerPosRelToDoor.y) < 20.0f && fabsf(playerPosRelToDoor.x) < 20.0f &&
@@ -243,7 +244,7 @@ void EnDoor_WaitForCheck(EnDoor* this, PlayState* play) {
     if (Actor_ProcessTalkRequest(&this->actor, play)) {
         this->actionFunc = EnDoor_Check;
     } else {
-        func_8002F2CC(&this->actor, play, DOOR_CHECK_RANGE);
+        Actor_OfferTalk(&this->actor, play, DOOR_CHECK_RANGE);
     }
 }
 
